@@ -12,16 +12,25 @@ class AppTheme {
 
       // 텍스트 테마
       textTheme: TextTheme(
-        displayLarge: AppTextStyles.heading1,
+        // Headline 스타일
+        displayLarge: AppTextStyles.headline1,
+        displayMedium: AppTextStyles.headline2,
+        displaySmall: AppTextStyles.headline3,
+
+        // Body 스타일
         bodyLarge: AppTextStyles.body1,
-        bodySmall: AppTextStyles.caption,
+        bodyMedium: AppTextStyles.body2,
+
+        // Caption 스타일
+        labelMedium: AppTextStyles.caption1,
+        labelSmall: AppTextStyles.caption2,
       ),
 
       // 앱바 테마
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.primaryColor,
         elevation: 0,
-        titleTextStyle: AppTextStyles.heading1.copyWith(
+        titleTextStyle: AppTextStyles.headline1.copyWith(
           color: Colors.white,
           fontSize: 20,
         ),
