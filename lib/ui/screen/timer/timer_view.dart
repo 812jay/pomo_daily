@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pomo_daily/enum/timer/timer_type.dart';
 import 'package:pomo_daily/theme/app_colors.dart';
-import 'package:pomo_daily/theme/app_text_styles.dart';
 import 'package:pomo_daily/ui/widget/common/circle_button.dart';
+import 'package:pomo_daily/ui/widget/common/lottie_icon.dart';
 import 'package:pomo_daily/ui/widget/common/svg_icon.dart';
 
 import 'timer_view_model.dart';
@@ -23,13 +22,9 @@ class TimerView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            Lottie.asset(
+            LottieIcon(
+              timerState.mode.isWork ? 'rocket' : 'relax',
               animate: timerState.status.isRunning,
-              timerState.mode.isWork
-                  ? 'assets/lotties/rocket.json'
-                  : 'assets/lotties/relax.json',
-              width: 200,
-              height: 200,
             ),
             // 타이머 표시
             Text(
