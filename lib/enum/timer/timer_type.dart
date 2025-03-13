@@ -10,7 +10,16 @@ extension TimerModeExtension on TimerMode {
         return 'BREAK';
     }
   }
+
+  bool get isWork => this == TimerMode.work;
+  bool get isShortBreak => this == TimerMode.shortBreak;
 }
 
 // 타이머 상태를 나타내는 열거형
 enum TimerStatus { initial, running, paused, finished }
+
+extension TimerStatusExtension on TimerStatus {
+  bool get isPaused => this == TimerStatus.paused;
+  bool get isRunning => this == TimerStatus.running;
+  bool get isFinished => this == TimerStatus.finished;
+}

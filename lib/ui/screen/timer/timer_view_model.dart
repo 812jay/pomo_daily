@@ -7,8 +7,8 @@ import 'package:pomo_daily/model/timer/timer_model.dart';
 // 타이머 뷰모델
 class TimerViewModel extends StateNotifier<TimerState> {
   Timer? _timer;
-  static const int workDuration = 25 * 60; // 25분
-  static const int breakDuration = 5 * 60; // 5분
+  static const int workDuration = 25 * 1; // 25분
+  static const int breakDuration = 5 * 1; // 5분
   static const int defaultTotalSets = 4; // 기본 세트 수
 
   TimerViewModel()
@@ -117,6 +117,41 @@ class TimerViewModel extends StateNotifier<TimerState> {
         status: TimerStatus.initial,
         mode: TimerMode.work,
         currentSet: state.currentSet + 1,
+      );
+    }
+  }
+
+  // 다음 세트로 건너뛰기
+  void skipToNextSet() {
+    _timer?.cancel(); // 현재 타이머를 중지합니다.
+
+    if (state.mode == TimerMode.work) {
+      // 현재 모드가 work일 때만 completedSets 증가
+      final newCompletedSets = state.completedSets + 1;
+
+      if (newCompletedSets >= state.totalSets) {
+        // 모든 세트가 완료된 경우
+        state = state.copyWith(
+          status: TimerStatus.finished,
+          completedSets: newCompletedSets,
+        );
+      } else {
+        // 다음 세트로 전환
+        state = state.copyWith(
+          duration: breakDuration, // 다음 세트는 휴식 시간으로 설정
+          status: TimerStatus.initial,
+          mode: TimerMode.shortBreak,
+          completedSets: newCompletedSets, // completedSets 증가
+          currentSet: state.currentSet + 1, // 현재 세트 수 증가
+        );
+      }
+    } else {
+      // 현재 모드가 break일 때는 completedSets 증가하지 않음
+      state = state.copyWith(
+        duration: workDuration, // 다음 세트는 작업 시간으로 설정
+        status: TimerStatus.initial,
+        mode: TimerMode.work,
+        currentSet: state.currentSet + 1, // 현재 세트 수 증가
       );
     }
   }
