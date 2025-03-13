@@ -19,7 +19,7 @@ class SplashView extends ConsumerWidget {
       data: (isLoaded) {
         if (isLoaded) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, '/home'); // 홈으로 이동
+            Navigator.pushReplacementNamed(context, '/timer'); // 홈으로 이동
           });
         }
         return SizedBox.shrink();
