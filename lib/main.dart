@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomo_daily/ui/screens/home_view.dart';
 import 'package:pomo_daily/splash_view.dart';
-import 'package:pomo_daily/theme/app_theme.dart';
-import 'package:pomo_daily/ui/screen/timer/timer_view.dart';
+import 'package:pomo_daily/config/theme/app_theme.dart';
 
 void main() {
   runApp(ProviderScope(child: const MyApp()));
@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (_) => const SplashView());
-          case '/timer':
-            return MaterialPageRoute(builder: (_) => const TimerView());
+          case '/home':
+            return MaterialPageRoute(builder: (_) => const HomeView());
         }
         return null;
       },

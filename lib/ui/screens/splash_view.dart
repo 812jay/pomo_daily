@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomo_daily/theme/app_colors.dart';
+import 'package:pomo_daily/config/theme/app_colors.dart';
 
 /// Splash 상태를 관리하는 Provider
 final splashProvider = FutureProvider<bool>((ref) async {
@@ -19,7 +19,7 @@ class SplashView extends ConsumerWidget {
       data: (isLoaded) {
         if (isLoaded) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, '/timer'); // 홈으로 이동
+            Navigator.pushReplacementNamed(context, '/home'); // 홈으로 이동
           });
         }
         return SizedBox.shrink();

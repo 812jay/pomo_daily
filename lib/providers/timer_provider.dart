@@ -1,27 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomo_daily/enum/timer/timer_type.dart';
-import 'package:pomo_daily/model/timer/timer_model.dart';
+import 'package:pomo_daily/data/enums/timer/timer_type.dart';
+import 'package:pomo_daily/data/models/timer/timer_model.dart';
 
 // 타이머 뷰모델
-class TimerViewModel extends StateNotifier<TimerState> {
+class TimerState extends Notifier<TimerModel> {
   Timer? _timer;
-  static const int workDuration = 25 * 1; // 25분
-  static const int breakDuration = 5 * 1; // 5분
+  static const int workDuration = 25 * 60; // 25분 (초 단위로 변경)
+  static const int breakDuration = 5 * 60; // 5분 (초 단위로 변경)
   static const int defaultTotalSets = 4; // 기본 세트 수
 
-  TimerViewModel()
-    : super(
-        TimerState(
-          duration: workDuration,
-          status: TimerStatus.initial,
-          mode: TimerMode.work,
-          currentSet: 1,
-          totalSets: defaultTotalSets,
-          completedSets: 0,
-        ),
-      );
+  @override
+  TimerModel build() {
+    return TimerModel(
+      duration: workDuration,
+      status: TimerStatus.initial,
+      mode: TimerMode.work,
+      currentSet: 1,
+      totalSets: defaultTotalSets,
+      completedSets: 0,
+    );
+  }
 
   // 타이머 시작
   void start() {
@@ -41,7 +41,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
   // 타이머 리셋
   void reset() {
     _timer?.cancel();
-    state = TimerState(
+    state = TimerModel(
       duration: workDuration,
       status: TimerStatus.initial,
       mode: TimerMode.work,
@@ -54,7 +54,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
   // 모드 전환
   void toggleMode() {
     _timer?.cancel();
-    state = TimerState(
+    state = TimerModel(
       duration: state.mode == TimerMode.work ? breakDuration : workDuration,
       status: TimerStatus.initial,
       mode:
@@ -155,15 +155,9 @@ class TimerViewModel extends StateNotifier<TimerState> {
       );
     }
   }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 }
 
 // Provider 정의
-final timerProvider = StateNotifierProvider<TimerViewModel, TimerState>(
-  (ref) => TimerViewModel(),
+final timerProvider = NotifierProvider<TimerState, TimerModel>(
+  () => TimerState(),
 );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pomo_daily/theme/app_colors.dart';
+import 'package:pomo_daily/config/theme/app_colors.dart';
 
 class SvgIcon extends StatelessWidget {
   const SvgIcon({

@@ -1,7 +1,7 @@
 // 타이머 상태를 담는 클래스
-import 'package:pomo_daily/enum/timer/timer_type.dart';
+import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 
-class TimerState {
+class TimerModel {
   final int duration;
   final TimerStatus status;
   final TimerMode mode;
@@ -9,7 +9,7 @@ class TimerState {
   final int totalSets; // 총 세트
   final int completedSets; // 완료한 세트
 
-  TimerState({
+  TimerModel({
     required this.duration,
     required this.status,
     required this.mode,
@@ -19,7 +19,7 @@ class TimerState {
   });
 
   // 상태 복사 메서드
-  TimerState copyWith({
+  TimerModel copyWith({
     int? duration,
     TimerStatus? status,
     TimerMode? mode,
@@ -27,7 +27,7 @@ class TimerState {
     int? totalSets,
     int? completedSets,
   }) {
-    return TimerState(
+    return TimerModel(
       duration: duration ?? this.duration,
       status: status ?? this.status,
       mode: mode ?? this.mode,

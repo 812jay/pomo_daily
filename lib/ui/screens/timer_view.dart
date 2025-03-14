@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomo_daily/enum/timer/timer_type.dart';
-import 'package:pomo_daily/theme/app_colors.dart';
-import 'package:pomo_daily/ui/widget/common/circle_button.dart';
-import 'package:pomo_daily/ui/widget/common/lottie_icon.dart';
-import 'package:pomo_daily/ui/widget/common/svg_icon.dart';
+import 'package:pomo_daily/data/enums/timer/timer_type.dart';
+import 'package:pomo_daily/config/theme/app_colors.dart';
+import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
+import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
+import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
 
-import 'timer_view_model.dart';
+import '../../providers/timer_state.dart';
 
 class TimerView extends ConsumerWidget {
   const TimerView({super.key});
@@ -17,7 +17,8 @@ class TimerView extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
