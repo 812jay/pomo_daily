@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomo_daily/%08providers/timer_provider.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
 import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
-
-import '../../providers/timer_state.dart';
 
 class TimerView extends ConsumerWidget {
   const TimerView({super.key});

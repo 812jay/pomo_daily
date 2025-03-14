@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/ui/screens/home_view.dart';
-import 'package:pomo_daily/splash_view.dart';
+import 'package:pomo_daily/ui/screens/splash_view.dart';
 import 'package:pomo_daily/config/theme/app_theme.dart';
 
 void main() {
