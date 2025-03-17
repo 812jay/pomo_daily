@@ -1,11 +1,10 @@
-// lib/features/home/ui/home_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/app_colors.dart';
-import 'package:pomo_daily/ui/screens/setting_view.dart';
+import 'package:pomo_daily/ui/screens/setting/setting_view.dart';
 import 'package:pomo_daily/ui/screens/timer_view.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
-import 'package:pomo_daily/%08providers/bottom_nav_provider.dart'; // Import the HomeState
+import 'package:pomo_daily/providers/bottom_nav_provider.dart'; // Import the HomeState
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});

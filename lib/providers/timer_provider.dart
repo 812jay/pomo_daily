@@ -7,9 +7,11 @@ import 'package:pomo_daily/data/models/timer/timer_model.dart';
 // 타이머 뷰모델
 class TimerState extends Notifier<TimerModel> {
   Timer? _timer;
-  static const int workDuration = 25 * 60; // 25분 (초 단위로 변경)
-  static const int breakDuration = 5 * 60; // 5분 (초 단위로 변경)
-  static const int defaultTotalSets = 4; // 기본 세트 수
+  double workMinute = 5;
+  double breakMinute = 5;
+  int get workDuration => workMinute.toInt() * 60;
+  int get breakDuration => breakMinute.toInt() * 60;
+  int defaultTotalSets = 4;
 
   @override
   TimerModel build() {
