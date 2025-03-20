@@ -12,7 +12,8 @@ class SettingTimerView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timerState = ref.watch(timerProvider);
+    final timerNotifier = ref.read(timerProvider.notifier);
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -44,9 +45,13 @@ class SettingTimerView extends ConsumerWidget {
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: 5,
+                        value: timerNotifier.workDuration.toDouble() / 60,
                         labelSuffix: '분',
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          ref
+                              .read(timerProvider.notifier)
+                              .setWorkDuration(value);
+                        },
                       ),
                     ),
                   ),
@@ -55,9 +60,13 @@ class SettingTimerView extends ConsumerWidget {
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: 5,
+                        value: timerNotifier.breakDuration.toDouble() / 60,
                         labelSuffix: '분',
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          ref
+                              .read(timerProvider.notifier)
+                              .setBreakDuration(value);
+                        },
                       ),
                     ),
                   ),
@@ -66,15 +75,40 @@ class SettingTimerView extends ConsumerWidget {
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: 1,
+                        value: timerNotifier.totalSets.toDouble(),
                         min: 1,
                         max: 20,
                         division: 19,
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          ref.read(timerProvider.notifier).setTotalSets(value);
+                        },
                       ),
                     ),
                   ),
                 ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    AppColors.backgroundColor,
+                  ),
+                  shadowColor: WidgetStateProperty.all(AppColors.borderBlack),
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: AppColors.borderGray),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  ref.read(timerProvider.notifier).saveSettings();
+                  Navigator.pop(context);
+                },
+                child: Text('저장', style: AppTextStyles.body1),
               ),
             ),
           ],

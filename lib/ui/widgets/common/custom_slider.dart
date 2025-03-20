@@ -24,12 +24,12 @@ class CustomSlider extends StatefulWidget {
 }
 
 class CustomSliderState extends State<CustomSlider> {
-  late double currentValue; // Declare currentValue
+  late double currentValue;
 
   @override
   void initState() {
     super.initState();
-    currentValue = widget.value; // Initialize currentValue
+    currentValue = widget.value;
   }
 
   @override
@@ -54,6 +54,7 @@ class CustomSliderState extends State<CustomSlider> {
           setState(() {
             currentValue = value;
           });
+          widget.onChanged(value);
         },
       ),
     );
