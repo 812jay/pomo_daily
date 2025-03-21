@@ -15,39 +15,66 @@ class SplashView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final splashState = ref.watch(splashProvider);
 
-    splashState.when(
-      data: (isLoaded) {
-        if (isLoaded) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, '/home'); // 홈으로 이동
-          });
-        }
-        return SizedBox.shrink();
-      },
-      loading: () => _buildSplashScreen(), // 로딩 중 화면
-      error: (err, stack) => Center(child: Text('Error: $err')),
+    return Scaffold(
+      body: splashState.when(
+        data: (isLoaded) => SplashRedirect(isLoaded: isLoaded),
+        loading: () => const SplashContent(),
+        error: (err, stack) => ErrorWidget(err),
+      ),
     );
-
-    return Scaffold(body: _buildSplashScreen());
   }
+}
 
-  /// Splash 화면 UI
-  Widget _buildSplashScreen() {
+class SplashRedirect extends StatelessWidget {
+  const SplashRedirect({required this.isLoaded});
+
+  final bool isLoaded;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoaded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/home');
+      });
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+class SplashContent extends StatelessWidget {
+  const SplashContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: AppColors.primaryColor,
-      child: Center(
+      child: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Pomo Daily',
-              style: TextStyle(fontSize: 30, color: Colors.white),
-            ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(color: Colors.white),
-          ],
+          children: [AppTitle(), SizedBox(height: 20), LoadingIndicator()],
         ),
       ),
     );
+  }
+}
+
+class AppTitle extends StatelessWidget {
+  const AppTitle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Pomo Daily',
+      style: TextStyle(fontSize: 30, color: Colors.white),
+    );
+  }
+}
+
+class LoadingIndicator extends StatelessWidget {
+  const LoadingIndicator({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const CircularProgressIndicator(color: Colors.white);
   }
 }

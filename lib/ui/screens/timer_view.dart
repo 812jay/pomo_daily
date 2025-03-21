@@ -164,8 +164,8 @@ class _ControlButtons extends StatelessWidget {
           ),
         if (timer.status.isFinished)
           _ResetButton(onPressed: timerController.reset),
-        if (timer.status.isPaused)
-          _SkipButton(onPressed: timerController.skipToNextSet),
+        // if (timer.status.isPaused)
+        //   _SkipButton(onPressed: timerController.skipToNextSet),
       ],
     );
   }
@@ -206,17 +206,17 @@ class _ResetButton extends StatelessWidget {
   }
 }
 
-class _SkipButton extends StatelessWidget {
-  const _SkipButton({required this.onPressed});
+// class _SkipButton extends StatelessWidget {
+//   const _SkipButton({required this.onPressed});
 
-  final VoidCallback onPressed;
+//   final VoidCallback onPressed;
 
-  @override
-  Widget build(BuildContext context) {
-    return CircleButton(
-      outlined: true,
-      onPressed: onPressed,
-      child: SvgIcon(iconName: 'skip', iconColor: AppColors.iconPrimary),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return CircleButton(
+//       outlined: true,
+//       onPressed: onPressed,
+//       child: SvgIcon(iconName: 'skip', iconColor: AppColors.iconPrimary),
+//     );
+//   }
+// }

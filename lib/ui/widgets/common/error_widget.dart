@@ -3,7 +3,7 @@ import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
 
 class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({required this.exception});
+  const ErrorWidget({super.key, required this.exception});
 
   final Object exception;
 

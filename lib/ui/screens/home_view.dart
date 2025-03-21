@@ -8,50 +8,80 @@ import 'package:pomo_daily/providers/bottom_nav_provider.dart'; // Import the Ho
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
-  // 페이지 리스트 (index에 따라 보여줄 화면 결정)
-  static final List<Widget> _pages = [TimerView(), SettingView()];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(bottomNavProvider);
+
     return Scaffold(
-      body: _pages[selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.backgroundColor,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: 'timer',
-            icon: SvgIcon(
-              iconName: 'timer',
-              size: 24,
-              iconColor:
-                  selectedIndex == 0
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'settings',
-            icon: SvgIcon(
-              iconName: 'settings',
-              size: 24,
-              iconColor:
-                  selectedIndex == 1
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
-            ),
-          ),
-        ],
-        currentIndex: selectedIndex, // Set the current index
-        selectedItemColor:
-            AppColors.textPrimary, // Color for selected item label
-        unselectedItemColor:
-            AppColors.textSecondary, // Color for unselected item label
-        onTap:
-            (index) => ref
-                .read(bottomNavProvider.notifier)
-                .selectIndex(index), // Update the selected index
+      body: PageContent(selectedIndex: selectedIndex),
+      bottomNavigationBar: HomeNavigationBar(
+        selectedIndex: selectedIndex,
+        onIndexChanged:
+            (index) => ref.read(bottomNavProvider.notifier).selectIndex(index),
       ),
     );
   }
+}
+
+class PageContent extends StatelessWidget {
+  const PageContent({required this.selectedIndex, super.key});
+
+  final int selectedIndex;
+  static final List<Widget> _pages = [TimerView(), SettingView()];
+
+  @override
+  Widget build(BuildContext context) {
+    return _pages[selectedIndex];
+  }
+}
+
+class HomeNavigationBar extends StatelessWidget {
+  const HomeNavigationBar({
+    required this.selectedIndex,
+    required this.onIndexChanged,
+    super.key,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onIndexChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      backgroundColor: AppColors.backgroundColor,
+      items: [
+        NavigationBarItem(
+          label: 'timer',
+          iconName: 'timer',
+          isSelected: selectedIndex == 0,
+        ),
+        NavigationBarItem(
+          label: 'settings',
+          iconName: 'settings',
+          isSelected: selectedIndex == 1,
+        ),
+      ],
+      currentIndex: selectedIndex,
+      selectedItemColor: AppColors.textPrimary,
+      unselectedItemColor: AppColors.textSecondary,
+      onTap: onIndexChanged,
+    );
+  }
+}
+
+class NavigationBarItem extends BottomNavigationBarItem {
+  NavigationBarItem({
+    required String label,
+    required String iconName,
+    required bool isSelected,
+  }) : super(
+         label: label,
+         icon: SvgIcon(
+           iconName: iconName,
+           size: 24,
+           iconColor:
+               isSelected ? AppColors.textPrimary : AppColors.textSecondary,
+         ),
+       );
 }
