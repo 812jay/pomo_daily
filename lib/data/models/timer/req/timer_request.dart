@@ -10,17 +10,17 @@ class TimerRequest {
 
   factory TimerRequest.fromJson(Map<String, dynamic> json) {
     return TimerRequest(
-      workDuration: json['workSeconds'],
-      breakDuration: json['breakSeconds'],
+      workDuration: json['workDuration'],
+      breakDuration: json['breakDuration'],
       setCount: json['setCount'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'workSeconds': workDuration,
-      'breakSeconds': breakDuration,
-      'totalSetCount': setCount,
+      'workDuration': workDuration,
+      'breakDuration': breakDuration,
+      'setCount': setCount,
     };
   }
 }

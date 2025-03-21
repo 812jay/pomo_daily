@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
-import 'package:pomo_daily/services/setting/setting_service.dart';
+import 'package:pomo_daily/services/timer/timer_service.dart';
 
-final settingServiceProvider = Provider((ref) => SettingService());
+final settingServiceProvider = Provider((ref) => TimerService());
 
 // 타이머 뷰모델
 class TimerState extends AsyncNotifier<TimerLocal> {
@@ -14,7 +14,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   late int workDuration;
   late int breakDuration;
   late int totalSets;
-  late SettingService _settingService;
+  late TimerService _settingService;
 
   @override
   Future<TimerLocal> build() async {
@@ -25,7 +25,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   }
 
   Future<TimerLocal> setTimerSetting() async {
-    final timerSetting = await _settingService.getTimerSetting();
+    final timerSetting = await _settingService.getTimer();
     workDuration =
         timerSetting.mode == TimerMode.work ? timerSetting.duration : 25 * 60;
     breakDuration =
@@ -46,7 +46,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     );
 
     // 설정 저장
-    await _settingService.setTimerSetting(payload);
+    await _settingService.setTimer(payload);
 
     // 현재 상태 리셋
     final currentState = state.value;

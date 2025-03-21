@@ -14,7 +14,7 @@ class SettingView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('설정', style: AppTextStyles.headline3),
+            Text('Settings', style: AppTextStyles.headline3),
             SizedBox(height: 20),
             Container(
               width: double.infinity,
@@ -26,7 +26,7 @@ class SettingView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SettingItem(
-                    label: '타이머 설정',
+                    label: 'Timer Settings',
                     onTap: () {
                       Navigator.pushNamed(context, '/setting/timer');
                     },

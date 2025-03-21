@@ -6,13 +6,14 @@ import 'package:pomo_daily/config/theme/app_text_styles.dart';
 import 'package:pomo_daily/ui/widgets/common/custom_slider.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
 import 'package:pomo_daily/ui/widgets/setting/setting_item.dart';
+import 'package:pomo_daily/utils/duration_extensions.dart';
 
 class SettingTimerView extends ConsumerWidget {
   const SettingTimerView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timerNotifier = ref.read(timerProvider.notifier);
+    final timerController = ref.read(timerProvider.notifier);
 
     return Scaffold(
       body: Padding(
@@ -27,7 +28,7 @@ class SettingTimerView extends ConsumerWidget {
                   iconName: 'chevron-left',
                   size: 42,
                 ),
-                Text('타이머 설정', style: AppTextStyles.headline3),
+                Text('Timer Settings', style: AppTextStyles.headline3),
               ],
             ),
             SizedBox(height: 20),
@@ -41,41 +42,33 @@ class SettingTimerView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SettingItem(
-                    label: '집중시간',
+                    label: 'Focus Time',
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: timerNotifier.workDuration.toDouble() / 60,
-                        labelSuffix: '분',
-                        onChanged: (value) {
-                          ref
-                              .read(timerProvider.notifier)
-                              .setWorkDuration(value);
-                        },
+                        value: timerController.workDuration.toDoubleMinutes,
+                        labelSuffix: 'min',
+                        onChanged: timerController.setWorkDuration,
                       ),
                     ),
                   ),
                   SettingItem(
-                    label: '휴식시간',
+                    label: 'Break Time',
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: timerNotifier.breakDuration.toDouble() / 60,
-                        labelSuffix: '분',
-                        onChanged: (value) {
-                          ref
-                              .read(timerProvider.notifier)
-                              .setBreakDuration(value);
-                        },
+                        value: timerController.breakDuration.toDoubleMinutes,
+                        labelSuffix: 'min',
+                        onChanged: timerController.setBreakDuration,
                       ),
                     ),
                   ),
                   SettingItem(
-                    label: '세트 수',
+                    label: 'Sets',
                     labelWidth: 60,
                     suffixWidget: Expanded(
                       child: CustomSlider(
-                        value: timerNotifier.totalSets.toDouble(),
+                        value: timerController.totalSets.toDouble(),
                         min: 1,
                         max: 20,
                         division: 19,
@@ -108,7 +101,7 @@ class SettingTimerView extends ConsumerWidget {
                   ref.read(timerProvider.notifier).saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text('저장', style: AppTextStyles.body1),
+                child: Text('Save', style: AppTextStyles.body1),
               ),
             ),
           ],

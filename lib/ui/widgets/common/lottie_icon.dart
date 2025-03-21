@@ -20,6 +20,7 @@ class LottieIcon extends StatelessWidget {
       animate: animate,
       width: size,
       height: size,
+      
     );
   }
 }

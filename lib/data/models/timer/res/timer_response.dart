@@ -1,27 +1,27 @@
 class TimerResponse {
-  final int workSeconds;
-  final int breakSeconds;
-  final int totalSetCount;
+  final int workDuration;
+  final int breakDuration;
+  final int setCount;
 
   TimerResponse({
-    required this.workSeconds,
-    required this.breakSeconds,
-    required this.totalSetCount,
+    required this.workDuration,
+    required this.breakDuration,
+    required this.setCount,
   });
 
   factory TimerResponse.fromJson(Map<String, dynamic> json) {
     return TimerResponse(
-      workSeconds: json['workSeconds'],
-      breakSeconds: json['breakSeconds'],
-      totalSetCount: json['totalSetCount'],
+      workDuration: json['workDuration'],
+      breakDuration: json['breakDuration'],
+      setCount: json['setCount'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'workSeconds': workSeconds,
-      'breakSeconds': breakSeconds,
-      'totalSetCount': totalSetCount,
+      'workDuration': workDuration,
+      'breakDuration': breakDuration,
+      'setCount': setCount,
     };
   }
 }
