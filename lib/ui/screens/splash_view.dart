@@ -26,7 +26,7 @@ class SplashView extends ConsumerWidget {
 }
 
 class SplashRedirect extends StatelessWidget {
-  const SplashRedirect({required this.isLoaded});
+  const SplashRedirect({super.key, required this.isLoaded});
 
   final bool isLoaded;
 
