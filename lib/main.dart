@@ -9,7 +9,6 @@ import 'package:pomo_daily/config/theme/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('settings');
   runApp(ProviderScope(child: const MyApp()));
 }
 
