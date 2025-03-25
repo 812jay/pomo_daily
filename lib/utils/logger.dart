@@ -33,7 +33,7 @@ class AppLogger {
   }
 
   /// verbose 로그
-  static void v(
+  static void verbose(
     String message, {
     String? tag,
     dynamic error,
@@ -49,7 +49,7 @@ class AppLogger {
   }
 
   /// debug 로그
-  static void d(
+  static void debug(
     String message, {
     String? tag,
     dynamic error,
@@ -65,7 +65,7 @@ class AppLogger {
   }
 
   /// info 로그
-  static void i(
+  static void info(
     String message, {
     String? tag,
     dynamic error,
@@ -81,7 +81,7 @@ class AppLogger {
   }
 
   /// warning 로그
-  static void w(
+  static void warning(
     String message, {
     String? tag,
     dynamic error,
@@ -97,7 +97,7 @@ class AppLogger {
   }
 
   /// error 로그
-  static void e(
+  static void error(
     String message, {
     String? tag,
     dynamic error,
@@ -129,19 +129,19 @@ class AppLogger {
     String levelPrefix;
     switch (level) {
       case LogLevel.verbose:
-        levelPrefix = '💬 V';
+        levelPrefix = '💬 Verbose';
         break;
       case LogLevel.debug:
-        levelPrefix = '🐛 D';
+        levelPrefix = '🐛 Debug';
         break;
       case LogLevel.info:
-        levelPrefix = 'ℹ️ I';
+        levelPrefix = 'ℹ️ Info';
         break;
       case LogLevel.warning:
-        levelPrefix = '⚠️ W';
+        levelPrefix = '⚠️ Warning';
         break;
       case LogLevel.error:
-        levelPrefix = '🔴 E';
+        levelPrefix = '🔴 Error';
         break;
       default:
         levelPrefix = '';
@@ -169,7 +169,7 @@ class AppLogger {
   /// 성능 측정 시작
   static Stopwatch startPerformanceLog(String operation, {String? tag}) {
     final stopwatch = Stopwatch()..start();
-    d('⏱️ Started: $operation', tag: tag);
+    debug('⏱️ Started: $operation', tag: tag);
     return stopwatch;
   }
 
@@ -180,7 +180,7 @@ class AppLogger {
     String? tag,
   }) {
     stopwatch.stop();
-    d(
+    debug(
       '⏱️ Completed: $operation in ${stopwatch.elapsedMilliseconds}ms',
       tag: tag,
     );

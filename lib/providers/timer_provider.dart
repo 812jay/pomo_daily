@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
-import 'package:pomo_daily/services/timer/timer_service.dart';
+import 'package:pomo_daily/services/setting/setting_service.dart';
+import 'package:vibration/vibration.dart';
 
-final settingServiceProvider = Provider((ref) => TimerService());
+final settingServiceProvider = Provider((ref) => SettingService());
 
 // 타이머 뷰모델
 class TimerState extends AsyncNotifier<TimerLocal> {
@@ -14,7 +15,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   late int workDuration;
   late int breakDuration;
   late int totalSets;
-  late TimerService _settingService;
+  late SettingService _settingService;
 
   @override
   Future<TimerLocal> build() async {
@@ -115,6 +116,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
         completedSets: currentState.completedSets,
       ),
     );
+    await vibrate();
   }
 
   // 시간 포맷 함수
@@ -227,6 +229,13 @@ class TimerState extends AsyncNotifier<TimerLocal> {
           currentSet: currentState.currentSet + 1, // 현재 세트 수 증가
         ),
       );
+    }
+    await vibrate();
+  }
+
+  Future<void> vibrate() async {
+    if (await Vibration.hasVibrator() && await _settingService.getVibration()) {
+      await Vibration.vibrate(duration: 700);
     }
   }
 }

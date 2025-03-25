@@ -5,11 +5,13 @@ class SettingItem extends StatelessWidget {
   const SettingItem({
     super.key,
     required this.label,
+    this.isExpandedLabel = false,
     this.labelWidth,
     this.suffixWidget,
     this.onTap,
   });
   final String label;
+  final bool isExpandedLabel;
   final double? labelWidth;
   final Widget? suffixWidget;
   final GestureTapCallback? onTap;
@@ -22,10 +24,12 @@ class SettingItem extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Row(
           children: [
-            SizedBox(
-              width: labelWidth,
-              child: Text(label, style: AppTextStyles.body1),
-            ),
+            isExpandedLabel
+                ? Expanded(child: Text(label, style: AppTextStyles.body1))
+                : SizedBox(
+                  width: labelWidth,
+                  child: Text(label, style: AppTextStyles.body1),
+                ),
             suffixWidget ?? SizedBox.shrink(),
           ],
         ),

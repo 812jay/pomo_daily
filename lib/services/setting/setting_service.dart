@@ -4,9 +4,8 @@ import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
 import 'package:pomo_daily/utils/logger.dart';
 
-class TimerService {
+class SettingService {
   Future<void> setTimer(TimerRequest payload) async {
-    // print('payload: ${payload.toJson()}');
     final settingBox = await Hive.openBox('setting');
     settingBox.put('timer', payload.toJson());
   }
@@ -37,8 +36,8 @@ class TimerService {
         completedSets: 0,
       );
     } catch (e, stackTrace) {
-      AppLogger.e('Error in getTimerSetting: $e');
-      AppLogger.e('Stack trace: $stackTrace');
+      AppLogger.error('Error in getTimerSetting: $e');
+      AppLogger.error('Stack trace: $stackTrace');
       return TimerLocal(
         duration: defaultWorkDuration,
         status: TimerStatus.initial,
@@ -54,5 +53,35 @@ class TimerService {
     final settingBox = await Hive.openBox('setting');
     // 방법 1: 특정 키만 삭제
     await settingBox.delete('timer');
+  }
+
+  Future<void> initializeVibrationSetting() async {
+    try {
+      final settingBox = await Hive.openBox('setting');
+      // 'isVibration' 키가 존재하는지 확인
+      if (!settingBox.containsKey('isVibration')) {
+        // 키가 없으면 (최초 설치) false로 설정
+        await settingBox.put('isVibration', false);
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error('Error initializing vibration setting: $e');
+      AppLogger.error('Stack trace: $stackTrace');
+    }
+  }
+
+  Future<void> setVibration(bool isVibration) async {
+    try {
+      final settingBox = await Hive.openBox('setting');
+      await settingBox.put('isVibration', isVibration);
+      AppLogger.info('Vibration setting updated to: $isVibration');
+    } catch (e, stackTrace) {
+      AppLogger.error('Error setting vibration: $e');
+      AppLogger.error('Stack trace: $stackTrace');
+    }
+  }
+
+  Future<bool> getVibration() async {
+    final settingBox = await Hive.openBox('setting');
+    return settingBox.get('isVibration', defaultValue: false);
   }
 }
