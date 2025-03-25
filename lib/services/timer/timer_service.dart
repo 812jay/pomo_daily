@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
+import 'package:pomo_daily/utils/logger.dart';
 
 class TimerService {
   Future<void> setTimer(TimerRequest payload) async {
@@ -36,8 +37,8 @@ class TimerService {
         completedSets: 0,
       );
     } catch (e, stackTrace) {
-      print('Error in getTimerSetting: $e');
-      print('Stack trace: $stackTrace');
+      AppLogger.e('Error in getTimerSetting: $e');
+      AppLogger.e('Stack trace: $stackTrace');
       return TimerLocal(
         duration: defaultWorkDuration,
         status: TimerStatus.initial,
