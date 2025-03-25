@@ -52,7 +52,7 @@ class _TimerContent extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 200),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
             _TimerAnimation(
               isWork: timer.mode.isWork,
               isRunning: timer.status.isRunning,
