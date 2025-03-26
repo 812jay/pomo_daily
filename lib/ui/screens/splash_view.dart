@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/app_colors.dart';
+import 'package:pomo_daily/config/theme/app_text_styles.dart';
 
 /// Splash 상태를 관리하는 Provider
 final splashProvider = FutureProvider<bool>((ref) async {
@@ -47,11 +48,15 @@ class SplashContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.primaryColor,
-      child: const Center(
+      color: AppColors.backgroundColor,
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [AppTitle(), SizedBox(height: 20), LoadingIndicator()],
+          children: [
+            const AppTitle(),
+            const SizedBox(height: 20),
+            const AppLogo(),
+          ],
         ),
       ),
     );
@@ -63,18 +68,20 @@ class AppTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Pomo Daily',
-      style: TextStyle(fontSize: 30, color: Colors.white),
-    );
+    return Text('Pomo Daily', style: AppTextStyles.headline1);
   }
 }
 
-class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({super.key});
+class AppLogo extends StatelessWidget {
+  const AppLogo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const CircularProgressIndicator(color: Colors.white);
+    return Image.asset(
+      'assets/logos/png/ic_launcher_play_store_removebg.png',
+      width: 200,
+      height: 200,
+      fit: BoxFit.cover,
+    );
   }
 }
