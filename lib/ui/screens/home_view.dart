@@ -5,6 +5,7 @@ import 'package:pomo_daily/ui/screens/setting/setting_view.dart';
 import 'package:pomo_daily/ui/screens/timer_view.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
 import 'package:pomo_daily/providers/bottom_nav_provider.dart'; // Import the HomeState
+import 'package:pomo_daily/generated/l10n/app_localizations.dart';
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
@@ -48,16 +49,18 @@ class HomeNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BottomNavigationBar(
       backgroundColor: AppColors.backgroundColor,
       items: [
         NavigationBarItem(
-          label: 'timer',
+          label: l10n.timer,
           iconName: 'timer',
           isSelected: selectedIndex == 0,
         ),
         NavigationBarItem(
-          label: 'settings',
+          label: l10n.settings,
           iconName: 'settings',
           isSelected: selectedIndex == 1,
         ),

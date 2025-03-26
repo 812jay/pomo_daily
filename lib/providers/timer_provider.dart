@@ -4,10 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
-import 'package:pomo_daily/services/setting/setting_service.dart';
+import 'package:pomo_daily/services/timer_service.dart';
+import 'package:pomo_daily/services/vibration_service.dart';
+
 import 'package:vibration/vibration.dart';
 
-final settingServiceProvider = Provider((ref) => SettingService());
+final vibrationServiceProvider = Provider((ref) => VibrationService());
+final timerServiceProvider = Provider((ref) => TimerService());
 
 // 타이머 뷰모델
 class TimerState extends AsyncNotifier<TimerLocal> {
@@ -15,27 +18,25 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   late int workDuration;
   late int breakDuration;
   late int totalSets;
-  late SettingService _settingService;
+  late VibrationService _vibrationService;
+  late TimerService _timerService;
 
   @override
   Future<TimerLocal> build() async {
-    _settingService = ref.read(settingServiceProvider);
+    _vibrationService = ref.read(vibrationServiceProvider);
+    _timerService = ref.read(timerServiceProvider);
     final TimerLocal timerSetting = await setTimerSetting();
 
     return timerSetting;
   }
 
   Future<TimerLocal> setTimerSetting() async {
-    final timerSetting = await _settingService.getTimer();
-    workDuration =
-        timerSetting.mode == TimerMode.work ? timerSetting.duration : 25 * 60;
-    breakDuration =
-        timerSetting.mode == TimerMode.shortBreak
-            ? timerSetting.duration
-            : 5 * 60;
-    totalSets = timerSetting.totalSets;
+    final timerSetting = await _timerService.getTimerSettings();
+    workDuration = timerSetting['workDuration'] as int;
+    breakDuration = timerSetting['breakDuration'] as int;
+    totalSets = timerSetting['setCount'] as int;
 
-    return timerSetting;
+    return _timerService.createInitialState(timerSetting);
   }
 
   // 설정 저장 메서드
@@ -47,7 +48,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     );
 
     // 설정 저장
-    await _settingService.setTimer(payload);
+    await _timerService.setTimer(payload);
 
     // 현재 상태 리셋
     final currentState = state.value;
@@ -234,7 +235,8 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   }
 
   Future<void> vibrate() async {
-    if (await Vibration.hasVibrator() && await _settingService.getVibration()) {
+    if (await Vibration.hasVibrator() &&
+        await _vibrationService.getVibration()) {
       await Vibration.vibrate(duration: 700);
     }
   }

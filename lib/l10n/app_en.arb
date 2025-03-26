@@ -1,0 +1,16 @@
+{
+  "@@locale": "en",
+  "timer": "timer",
+  "settings": "Settings",
+  "timerSettings": "Timer Settings",
+  "vibration": "Vibration",
+  "work": "WORK",
+  "breakTime": "BREAK",
+  "language": "Language",
+  "english": "English",
+  "korean": "Korean",
+  "focusTime": "Focus Time",
+  "breakTime": "Break Time",
+  "sets": "Sets",
+  "save": "Save"
+} 

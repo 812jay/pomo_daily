@@ -7,6 +7,7 @@ import 'package:pomo_daily/ui/widgets/common/custom_slider.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
 import 'package:pomo_daily/ui/widgets/setting/setting_item.dart';
 import 'package:pomo_daily/utils/duration_extensions.dart';
+import 'package:pomo_daily/generated/l10n/app_localizations.dart';
 
 class SettingTimerView extends ConsumerWidget {
   const SettingTimerView({super.key});
@@ -14,6 +15,8 @@ class SettingTimerView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timerController = ref.read(timerProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
+    final labelWidth = MediaQuery.of(context).size.width * 0.2;
 
     return Scaffold(
       body: Padding(
@@ -28,7 +31,7 @@ class SettingTimerView extends ConsumerWidget {
                   iconName: 'chevron-left',
                   size: 42,
                 ),
-                Text('Timer Settings', style: AppTextStyles.headline3),
+                Text(l10n.timerSettings, style: AppTextStyles.headline3),
               ],
             ),
             SizedBox(height: 20),
@@ -42,8 +45,8 @@ class SettingTimerView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SettingItem(
-                    label: 'Focus Time',
-                    labelWidth: 60,
+                    label: l10n.focusTime,
+                    labelWidth: labelWidth,
                     suffixWidget: Expanded(
                       child: CustomSlider(
                         value: timerController.workDuration.toDoubleMinutes,
@@ -53,8 +56,8 @@ class SettingTimerView extends ConsumerWidget {
                     ),
                   ),
                   SettingItem(
-                    label: 'Break Time',
-                    labelWidth: 60,
+                    label: l10n.breakTime,
+                    labelWidth: labelWidth,
                     suffixWidget: Expanded(
                       child: CustomSlider(
                         value: timerController.breakDuration.toDoubleMinutes,
@@ -64,8 +67,8 @@ class SettingTimerView extends ConsumerWidget {
                     ),
                   ),
                   SettingItem(
-                    label: 'Sets',
-                    labelWidth: 60,
+                    label: l10n.sets,
+                    labelWidth: labelWidth,
                     suffixWidget: Expanded(
                       child: CustomSlider(
                         value: timerController.totalSets.toDouble(),
@@ -101,7 +104,7 @@ class SettingTimerView extends ConsumerWidget {
                   ref.read(timerProvider.notifier).saveSettings();
                   Navigator.pop(context);
                 },
-                child: Text('Save', style: AppTextStyles.body1),
+                child: Text(l10n.save, style: AppTextStyles.body1),
               ),
             ),
           ],
