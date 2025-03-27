@@ -21,93 +21,97 @@ class SettingTimerView extends ConsumerWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                SvgIcon(
-                  onTap: () => Navigator.pop(context),
-                  iconName: 'chevron-left',
-                  size: 42,
-                ),
-                Text(l10n.timerSettings, style: AppTextStyles.headline3),
-              ],
-            ),
-            SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.borderGray, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  SettingItem(
-                    label: l10n.focusTime,
-                    labelWidth: labelWidth,
-                    suffixWidget: Expanded(
-                      child: CustomSlider(
-                        value: timerController.workDuration.toDoubleMinutes,
-                        labelSuffix: 'min',
-                        onChanged: timerController.setWorkDuration,
-                      ),
-                    ),
+                  SvgIcon(
+                    onTap: () => Navigator.pop(context),
+                    iconName: 'chevron-left',
+                    size: 42,
                   ),
-                  SettingItem(
-                    label: l10n.breakTime,
-                    labelWidth: labelWidth,
-                    suffixWidget: Expanded(
-                      child: CustomSlider(
-                        value: timerController.breakDuration.toDoubleMinutes,
-                        labelSuffix: 'min',
-                        onChanged: timerController.setBreakDuration,
-                      ),
-                    ),
-                  ),
-                  SettingItem(
-                    label: l10n.sets,
-                    labelWidth: labelWidth,
-                    suffixWidget: Expanded(
-                      child: CustomSlider(
-                        value: timerController.totalSets.toDouble(),
-                        min: 1,
-                        max: 20,
-                        division: 19,
-                        onChanged: (value) {
-                          ref.read(timerProvider.notifier).setTotalSets(value);
-                        },
-                      ),
-                    ),
-                  ),
+                  Text(l10n.timerSettings, style: AppTextStyles.headline3),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                    AppColors.backgroundColor,
-                  ),
-                  shadowColor: WidgetStateProperty.all(AppColors.borderBlack),
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: AppColors.borderGray),
+              SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderGray, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SettingItem(
+                      label: l10n.focusTime,
+                      labelWidth: labelWidth,
+                      suffixWidget: Expanded(
+                        child: CustomSlider(
+                          value: timerController.workDuration.toDoubleMinutes,
+                          labelSuffix: 'min',
+                          onChanged: timerController.setWorkDuration,
+                        ),
+                      ),
+                    ),
+                    SettingItem(
+                      label: l10n.breakTime,
+                      labelWidth: labelWidth,
+                      suffixWidget: Expanded(
+                        child: CustomSlider(
+                          value: timerController.breakDuration.toDoubleMinutes,
+                          labelSuffix: 'min',
+                          onChanged: timerController.setBreakDuration,
+                        ),
+                      ),
+                    ),
+                    SettingItem(
+                      label: l10n.sets,
+                      labelWidth: labelWidth,
+                      suffixWidget: Expanded(
+                        child: CustomSlider(
+                          value: timerController.totalSets.toDouble(),
+                          min: 1,
+                          max: 20,
+                          division: 19,
+                          onChanged: (value) {
+                            ref
+                                .read(timerProvider.notifier)
+                                .setTotalSets(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                      AppColors.backgroundColor,
+                    ),
+                    shadowColor: WidgetStateProperty.all(AppColors.borderBlack),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: AppColors.borderGray),
+                      ),
                     ),
                   ),
+                  onPressed: () {
+                    ref.read(timerProvider.notifier).saveSettings();
+                    Navigator.pop(context);
+                  },
+                  child: Text(l10n.save, style: AppTextStyles.body1),
                 ),
-                onPressed: () {
-                  ref.read(timerProvider.notifier).saveSettings();
-                  Navigator.pop(context);
-                },
-                child: Text(l10n.save, style: AppTextStyles.body1),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
