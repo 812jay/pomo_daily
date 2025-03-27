@@ -1,0 +1,7 @@
+arb-dir: lib/l10n        # ARB 파일들이 위치할 디렉토리
+template-arb-file: app_en.arb    # 기본 템플릿으로 사용할 ARB 파일
+output-localization-file: app_localizations.dart    # 생성될 dart 파일
+output-dir: lib/generated/l10n
+synthetic-package: false
+preferred-supported-locales: [en]    # 기본 선호 로케일
+use-deferred-loading: false    # 지연 로딩 사용 여부

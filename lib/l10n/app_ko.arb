@@ -1,0 +1,16 @@
+{
+  "@@locale": "ko",
+  "timer": "타이머",
+  "settings": "설정",
+  "timerSettings": "타이머 설정",
+  "vibration": "진동",
+  "work": "작업",
+  "breakTime": "휴식",
+  "language": "언어",
+  "english": "영어",
+  "korean": "한국어",
+  "focusTime": "집중 시간",
+  "breakTime": "휴식 시간",
+  "sets": "세트 수",
+  "save": "저장"
+} 

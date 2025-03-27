@@ -1,4 +1,4 @@
-package com.example.pomo_daily
+package com.jay.pomo_daily
 
 import io.flutter.embedding.android.FlutterActivity
 
