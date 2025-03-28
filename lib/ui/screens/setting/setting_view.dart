@@ -19,106 +19,112 @@ class SettingView extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
 
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.settings, style: AppTextStyles.headline3),
-              SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderGray, width: 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SettingItem(
-                      label: l10n.timerSettings,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/setting/timer');
-                      },
-                    ),
-                    SettingItem(
-                      label: l10n.vibration,
-                      isExpandedLabel: true,
-                      suffixWidget: vibrationState.when(
-                        data:
-                            (isVibration) => CupertinoSwitch(
-                              value: isVibration,
-                              onChanged: (value) {
-                                // 현재 값을 전달하여 토글
-                                vibrationController.toggleVibration(
-                                  isVibration,
-                                );
-                              },
-                            ),
-                        loading:
-                            () => const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                        error:
-                            (error, stack) => Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.error_outline,
-                                  color: AppColors.error,
-                                  size: 18,
-                                ),
-                              ],
-                            ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.settings, style: AppTextStyles.headline3),
+                SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.borderGray, width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SettingItem(
+                        label: l10n.timerSettings,
+                        onTap: () {
+                          Navigator.pushNamed(context, '/setting/timer');
+                        },
                       ),
-                    ),
-                    SettingItem(
-                      label: l10n.language,
-                      isExpandedLabel: true,
-                      suffixWidget: locale.when(
-                        data:
-                            (currentLocale) => DropdownButton<String>(
-                              value: currentLocale.languageCode,
-                              underline: Container(),
-                              items: [
-                                DropdownMenuItem(
-                                  value: 'ko',
-                                  child: Text(l10n.korean),
+                      SettingItem(
+                        label: l10n.vibration,
+                        isExpandedLabel: true,
+                        suffixWidget: vibrationState.when(
+                          data:
+                              (isVibration) => CupertinoSwitch(
+                                value: isVibration,
+                                onChanged: (value) {
+                                  // 현재 값을 전달하여 토글
+                                  vibrationController.toggleVibration(
+                                    isVibration,
+                                  );
+                                },
+                              ),
+                          loading:
+                              () => const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
                                 ),
-                                DropdownMenuItem(
-                                  value: 'en',
-                                  child: Text(l10n.english),
-                                ),
-                              ],
-                              onChanged: (String? value) {
-                                if (value != null) {
-                                  ref
-                                      .read(localeProvider.notifier)
-                                      .setLocale(value);
-                                }
-                              },
-                            ),
-                        loading:
-                            () => const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                        error:
-                            (error, _) => Icon(
-                              Icons.error_outline,
-                              color: AppColors.error,
-                              size: 18,
-                            ),
+                              ),
+                          error:
+                              (error, stack) => Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.error_outline,
+                                    color: AppColors.error,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                        ),
                       ),
-                    ),
-                  ],
+                      SettingItem(
+                        label: l10n.language,
+                        isExpandedLabel: true,
+                        suffixWidget: locale.when(
+                          data:
+                              (currentLocale) => DropdownButton<String>(
+                                value: currentLocale.languageCode,
+                                underline: Container(),
+                                items: [
+                                  DropdownMenuItem(
+                                    value: 'ko',
+                                    child: Text(l10n.korean),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'en',
+                                    child: Text(l10n.english),
+                                  ),
+                                ],
+                                onChanged: (String? value) {
+                                  if (value != null) {
+                                    ref
+                                        .read(localeProvider.notifier)
+                                        .setLocale(value);
+                                  }
+                                },
+                              ),
+                          loading:
+                              () => const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                          error:
+                              (error, _) => Icon(
+                                Icons.error_outline,
+                                color: AppColors.error,
+                                size: 18,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

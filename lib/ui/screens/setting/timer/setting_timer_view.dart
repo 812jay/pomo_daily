@@ -19,8 +19,7 @@ class SettingTimerView extends ConsumerWidget {
     final labelWidth = MediaQuery.of(context).size.width * 0.2;
 
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,6 +36,8 @@ class SettingTimerView extends ConsumerWidget {
               ),
               SizedBox(height: 20),
               Container(
+                margin: EdgeInsets.symmetric(horizontal: 24),
+
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderGray, width: 1),
