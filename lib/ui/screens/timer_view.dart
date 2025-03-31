@@ -4,7 +4,6 @@ import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
-import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
 import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';

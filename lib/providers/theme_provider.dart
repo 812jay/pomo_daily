@@ -8,17 +8,15 @@ final themeServiceProvider = Provider((ref) => ThemeService());
 // ThemeMode를 위한 별도의 provider 추가
 final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);
 
-class ThemeState extends AsyncNotifier<bool> {
+class ThemeState extends AsyncNotifier<ThemeMode> {
   late ThemeService _themeService;
 
   @override
-  Future<bool> build() async {
-    _themeService = ref.read(themeServiceProvider);
-    final isDarkMode = await _themeService.getTheme();
+  Future<ThemeMode> build() async {
     // 초기 themeMode 설정
-    ref.read(themeModeProvider.notifier).state =
-        isDarkMode ? ThemeMode.dark : ThemeMode.light;
-    return isDarkMode;
+    _themeService = ref.read(themeServiceProvider);
+    final themeMode = await _themeService.getTheme();
+    return themeMode;
   }
 
   Future<void> initializeThemeSetting() async {
@@ -27,17 +25,17 @@ class ThemeState extends AsyncNotifier<bool> {
     state = AsyncData(isDarkMode);
   }
 
-  Future<void> toggleTheme(bool currentValue) async {
+  Future<void> toggleTheme(ThemeMode currentValue) async {
     state = const AsyncLoading();
 
     try {
-      final newValue = !currentValue;
+      final newValue =
+          currentValue == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
       await _themeService.setTheme(newValue);
       final savedValue = await _themeService.getTheme();
 
       // themeMode 업데이트
-      ref.read(themeModeProvider.notifier).state =
-          savedValue ? ThemeMode.dark : ThemeMode.light;
+      ref.read(themeModeProvider.notifier).state = newValue;
 
       state = AsyncData(savedValue);
       AppLogger.debug('테마 설정이 변경되었습니다. 새 값: $savedValue', tag: 'ThemeState');
@@ -47,19 +45,19 @@ class ThemeState extends AsyncNotifier<bool> {
     }
   }
 
-  Future<void> setTheme(bool isDarkMode) async {
+  Future<void> setTheme(ThemeMode isDarkMode) async {
     await _themeService.setTheme(isDarkMode);
     final savedValue = await _themeService.getTheme();
     state = AsyncData(savedValue);
   }
 
-  Future<bool> getTheme() async {
+  Future<ThemeMode> getTheme() async {
     final savedValue = await _themeService.getTheme();
     state = AsyncData(savedValue);
     return savedValue;
   }
 }
 
-final themeProvider = AsyncNotifierProvider<ThemeState, bool>(
+final themeProvider = AsyncNotifierProvider<ThemeState, ThemeMode>(
   () => ThemeState(),
 );

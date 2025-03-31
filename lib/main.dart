@@ -10,30 +10,27 @@ import 'package:pomo_daily/ui/screens/setting/timer/setting_timer_view.dart';
 import 'package:pomo_daily/ui/screens/splash_view.dart';
 import 'package:pomo_daily/config/theme/app_theme.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
+import 'package:pomo_daily/adapters/theme_mode_adapter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
+  // ThemeMode Adapter 등록
+  Hive.registerAdapter(ThemeModeAdapter());
+
   // 설정 서비스 초기화
   final settingService = VibrationService();
   final themeService = ThemeService();
 
-  // 앱 최초 설치 시 진동 설정 초기화
   await settingService.initializeVibrationSetting();
   await themeService.initializeThemeSetting();
 
-  // 저장된 테마 값 가져오기
   final savedTheme = await themeService.getTheme();
 
   runApp(
     ProviderScope(
-      overrides: [
-        // 초기 테마 모드 설정
-        themeModeProvider.overrideWith(
-          (ref) => savedTheme ? ThemeMode.dark : ThemeMode.light,
-        ),
-      ],
+      overrides: [themeModeProvider.overrideWith((ref) => savedTheme)],
       child: const MyApp(),
     ),
   );
@@ -48,10 +45,9 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     // 앱이 시작될 때 테마 상태 초기화
-    ref.listen<AsyncValue<bool>>(themeProvider, (previous, next) {
-      next.whenData((isDarkMode) {
-        ref.read(themeModeProvider.notifier).state =
-            isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    ref.listen<AsyncValue<ThemeMode>>(themeProvider, (previous, next) {
+      next.whenData((themeMode) {
+        ref.read(themeModeProvider.notifier).state = themeMode;
       });
     });
 

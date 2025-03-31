@@ -134,7 +134,7 @@ class SettingView extends ConsumerWidget {
                         suffixWidget: themeState.when(
                           data:
                               (isDarkMode) => CupertinoSwitch(
-                                value: isDarkMode,
+                                value: isDarkMode == ThemeMode.dark,
                                 onChanged: (value) {
                                   themeController.toggleTheme(isDarkMode);
                                 },
