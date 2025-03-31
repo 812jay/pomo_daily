@@ -170,7 +170,7 @@ abstract class AppLocalizations {
   /// No description provided for @darkMode.
   ///
   /// In en, this message translates to:
-  /// **'dark mode'**
+  /// **'Dark Mode'**
   String get darkMode;
 }
 

@@ -45,5 +45,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get darkMode => 'dark mode';
+  String get darkMode => 'Dark Mode';
 }
