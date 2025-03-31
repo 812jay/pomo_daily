@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomo_daily/config/theme/app_colors.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/ui/screens/setting/setting_view.dart';
 import 'package:pomo_daily/ui/screens/timer_view.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
@@ -52,23 +52,25 @@ class HomeNavigationBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BottomNavigationBar(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: context.colors.background,
       items: [
         NavigationBarItem(
+          context: context,
           label: l10n.timer,
           iconName: 'timer',
           isSelected: selectedIndex == 0,
         ),
         NavigationBarItem(
+          context: context,
           label: l10n.settings,
           iconName: 'settings',
           isSelected: selectedIndex == 1,
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: AppColors.textPrimary,
-      unselectedItemColor: AppColors.textSecondary,
       onTap: onIndexChanged,
+      selectedItemColor: context.colors.iconPrimary,
+      unselectedItemColor: context.colors.iconSecondary,
     );
   }
 }
@@ -78,13 +80,16 @@ class NavigationBarItem extends BottomNavigationBarItem {
     required String label,
     required String iconName,
     required bool isSelected,
+    required BuildContext context,
   }) : super(
          label: label,
          icon: SvgIcon(
            iconName: iconName,
            size: 24,
            iconColor:
-               isSelected ? AppColors.textPrimary : AppColors.textSecondary,
+               isSelected
+                   ? context.colors.iconPrimary
+                   : context.colors.iconSecondary,
          ),
        );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
@@ -17,7 +18,7 @@ class TimerView extends ConsumerWidget {
     final timerController = ref.read(timerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: context.colors.background,
       body: timerState.when(
         loading: () => const _LoadingView(),
         error: (error, stackTrace) => ErrorWidget(error),
@@ -134,7 +135,10 @@ class _SetDot extends StatelessWidget {
       height: 20,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: isCompleted ? AppColors.success : AppColors.borderGray,
+        color:
+            isCompleted
+                ? context.colors.completedDot
+                : context.colors.uncompletedDot,
       ),
     );
   }
@@ -181,12 +185,12 @@ class _PlayPauseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleButton(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: context.colors.background,
       outlined: true,
       onPressed: onPressed,
       child: SvgIcon(
         iconName: isRunning ? 'pause' : 'play',
-        iconColor: AppColors.iconPrimary,
+        iconColor: context.colors.iconPrimary,
       ),
     );
   }
@@ -202,7 +206,11 @@ class _ResetButton extends StatelessWidget {
     return CircleButton(
       outlined: true,
       onPressed: onPressed,
-      child: SvgIcon(iconName: 'refresh', iconColor: AppColors.iconPrimary),
+      backgroundColor: context.colors.background,
+      child: SvgIcon(
+        iconName: 'refresh',
+        iconColor: context.colors.iconPrimary,
+      ),
     );
   }
 }
@@ -217,7 +225,8 @@ class _SkipButton extends StatelessWidget {
     return CircleButton(
       outlined: true,
       onPressed: onPressed,
-      child: SvgIcon(iconName: 'skip', iconColor: AppColors.iconPrimary),
+      backgroundColor: context.colors.background,
+      child: SvgIcon(iconName: 'skip', iconColor: context.colors.iconPrimary),
     );
   }
 }

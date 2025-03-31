@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 
 class SettingItem extends StatelessWidget {
   const SettingItem({
@@ -25,10 +26,22 @@ class SettingItem extends StatelessWidget {
         child: Row(
           children: [
             isExpandedLabel
-                ? Expanded(child: Text(label, style: AppTextStyles.body1))
+                ? Expanded(
+                  child: Text(
+                    label,
+                    style: AppTextStyles.body1.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+                  ),
+                )
                 : SizedBox(
                   width: labelWidth,
-                  child: Text(label, style: AppTextStyles.body1),
+                  child: Text(
+                    label,
+                    style: AppTextStyles.body1.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+                  ),
                 ),
             suffixWidget ?? SizedBox.shrink(),
           ],

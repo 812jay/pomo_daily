@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 
 /// Splash 상태를 관리하는 Provider
 final splashProvider = FutureProvider<bool>((ref) async {
@@ -48,7 +48,7 @@ class SplashContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backgroundColor,
+      color: context.colors.background,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +68,12 @@ class AppTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Pomo Daily', style: AppTextStyles.headline1);
+    return Text(
+      'Pomo Daily',
+      style: AppTextStyles.headline1.copyWith(
+        color: context.colors.textPrimary,
+      ),
+    );
   }
 }
 

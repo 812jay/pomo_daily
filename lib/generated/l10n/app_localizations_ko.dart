@@ -43,4 +43,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get save => '저장';
+
+  @override
+  String get darkMode => '다크모드';
 }

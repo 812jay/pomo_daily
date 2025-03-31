@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
-import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
 import 'package:pomo_daily/ui/widgets/common/custom_slider.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
@@ -29,9 +29,15 @@ class SettingTimerView extends ConsumerWidget {
                   SvgIcon(
                     onTap: () => Navigator.pop(context),
                     iconName: 'chevron-left',
+                    iconColor: context.colors.iconPrimary,
                     size: 42,
                   ),
-                  Text(l10n.timerSettings, style: AppTextStyles.headline3),
+                  Text(
+                    l10n.timerSettings,
+                    style: AppTextStyles.headline3.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -40,7 +46,7 @@ class SettingTimerView extends ConsumerWidget {
 
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderGray, width: 1),
+                  border: Border.all(color: context.colors.border, width: 1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -89,18 +95,19 @@ class SettingTimerView extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Align(
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 24),
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(
-                      AppColors.backgroundColor,
+                      context.colors.background,
                     ),
-                    shadowColor: WidgetStateProperty.all(AppColors.borderBlack),
+                    shadowColor: WidgetStateProperty.all(context.colors.border),
                     shape: WidgetStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(color: AppColors.borderGray),
+                        side: BorderSide(color: context.colors.border),
                       ),
                     ),
                   ),
@@ -108,7 +115,12 @@ class SettingTimerView extends ConsumerWidget {
                     ref.read(timerProvider.notifier).saveSettings();
                     Navigator.pop(context);
                   },
-                  child: Text(l10n.save, style: AppTextStyles.body1),
+                  child: Text(
+                    l10n.save,
+                    style: AppTextStyles.body1.copyWith(
+                      color: context.colors.textPrimary,
+                    ),
+                  ),
                 ),
               ),
             ],

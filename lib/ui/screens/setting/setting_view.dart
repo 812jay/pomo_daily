@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/app_colors.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
+import 'package:pomo_daily/providers/theme_provider.dart';
 import 'package:pomo_daily/providers/vibration_provider.dart';
 import 'package:pomo_daily/ui/widgets/setting/setting_item.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
@@ -17,7 +19,8 @@ class SettingView extends ConsumerWidget {
     final vibrationController = ref.read(vibrationProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
     final locale = ref.watch(localeProvider);
-
+    final themeState = ref.watch(themeProvider);
+    final themeController = ref.read(themeProvider.notifier);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,7 +29,12 @@ class SettingView extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.settings, style: AppTextStyles.headline3),
+                Text(
+                  l10n.settings,
+                  style: AppTextStyles.headline3.copyWith(
+                    color: context.colors.textPrimary,
+                  ),
+                ),
                 SizedBox(height: 20),
                 Container(
                   width: double.infinity,
@@ -71,7 +79,7 @@ class SettingView extends ConsumerWidget {
                                 children: [
                                   Icon(
                                     Icons.error_outline,
-                                    color: AppColors.error,
+                                    color: context.colors.error,
                                     size: 18,
                                   ),
                                 ],
@@ -118,6 +126,28 @@ class SettingView extends ConsumerWidget {
                                 color: AppColors.error,
                                 size: 18,
                               ),
+                        ),
+                      ),
+                      SettingItem(
+                        label: l10n.darkMode,
+                        isExpandedLabel: true,
+                        suffixWidget: themeState.when(
+                          data:
+                              (isDarkMode) => CupertinoSwitch(
+                                value: isDarkMode,
+                                onChanged: (value) {
+                                  themeController.toggleTheme(isDarkMode);
+                                },
+                              ),
+                          loading:
+                              () => const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                          error: (error, stack) => Icon(Icons.error_outline),
                         ),
                       ),
                     ],
