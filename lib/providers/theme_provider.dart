@@ -19,12 +19,6 @@ class ThemeState extends AsyncNotifier<ThemeMode> {
     return themeMode;
   }
 
-  Future<void> initializeThemeSetting() async {
-    _themeService = ref.read(themeServiceProvider);
-    final isDarkMode = await _themeService.getTheme();
-    state = AsyncData(isDarkMode);
-  }
-
   Future<void> toggleTheme(ThemeMode currentValue) async {
     state = const AsyncLoading();
 
@@ -43,18 +37,6 @@ class ThemeState extends AsyncNotifier<ThemeMode> {
       state = AsyncError(e, stack);
       AppLogger.error('테마 설정 변경 중 오류 발생', tag: 'ThemeState');
     }
-  }
-
-  Future<void> setTheme(ThemeMode isDarkMode) async {
-    await _themeService.setTheme(isDarkMode);
-    final savedValue = await _themeService.getTheme();
-    state = AsyncData(savedValue);
-  }
-
-  Future<ThemeMode> getTheme() async {
-    final savedValue = await _themeService.getTheme();
-    state = AsyncData(savedValue);
-    return savedValue;
   }
 }
 
