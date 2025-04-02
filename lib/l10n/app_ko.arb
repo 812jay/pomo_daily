@@ -12,5 +12,6 @@
   "focusTime": "집중 시간",
   "breakTime": "휴식 시간",
   "sets": "세트 수",
-  "save": "저장"
+  "save": "저장",
+  "darkMode": "다크모드"
 } 
