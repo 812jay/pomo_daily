@@ -150,8 +150,8 @@ class SetsSlider extends ConsumerWidget {
         child: CustomSlider(
           value: timerController.totalSets.toDouble(),
           min: 1,
-          max: 20,
-          division: 19,
+          max: 12,
+          division: 11,
           onChanged: (value) {
             ref.read(timerProvider.notifier).setTotalSets(value);
           },

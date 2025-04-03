@@ -110,13 +110,15 @@ class _SetIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 20,
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemCount: totalSets,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
-        itemBuilder: (_, index) => _SetDot(isCompleted: completedSets > index),
+      width: MediaQuery.of(context).size.width * 0.5,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 10,
+        runSpacing: 10,
+        children: List.generate(
+          totalSets,
+          (index) => _SetDot(isCompleted: completedSets > index),
+        ),
       ),
     );
   }
