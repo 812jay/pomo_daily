@@ -8,7 +8,7 @@ class TimerLocal {
   final int currentSet; // 현재 세트
   final int totalSets; // 총 세트
   final int completedSets; // 완료한 세트
-
+  final bool autoPlay; // 자동 재생 여부
   TimerLocal({
     required this.duration,
     required this.status,
@@ -16,6 +16,7 @@ class TimerLocal {
     required this.currentSet,
     required this.totalSets,
     required this.completedSets,
+    required this.autoPlay,
   });
 
   TimerLocal copyWith({
@@ -25,6 +26,7 @@ class TimerLocal {
     int? currentSet,
     int? totalSets,
     int? completedSets,
+    bool? autoPlay,
   }) {
     return TimerLocal(
       duration: duration ?? this.duration,
@@ -33,6 +35,7 @@ class TimerLocal {
       currentSet: currentSet ?? this.currentSet,
       totalSets: totalSets ?? this.totalSets,
       completedSets: completedSets ?? this.completedSets,
+      autoPlay: autoPlay ?? this.autoPlay,
     );
   }
 
@@ -44,6 +47,7 @@ class TimerLocal {
       'currentSet': currentSet,
       'totalSets': totalSets,
       'completedSets': completedSets,
+      'autoPlay': autoPlay,
     };
   }
 
@@ -56,6 +60,7 @@ class TimerLocal {
       currentSet: json['currentSet'] as int,
       totalSets: json['totalSets'] as int,
       completedSets: json['completedSets'] as int,
+      autoPlay: json['autoPlay'] as bool,
     );
   }
 }

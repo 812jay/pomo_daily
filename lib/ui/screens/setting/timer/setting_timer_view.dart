@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
@@ -79,6 +80,7 @@ class TimerSettingContainer extends StatelessWidget {
           FocusTimeSlider(labelWidth: labelWidth),
           BreakTimeSlider(labelWidth: labelWidth),
           SetsSlider(labelWidth: labelWidth),
+          AutoPlaySwitch(labelWidth: labelWidth),
         ],
       ),
     );
@@ -156,6 +158,29 @@ class SetsSlider extends ConsumerWidget {
             ref.read(timerProvider.notifier).setTotalSets(value);
           },
         ),
+      ),
+    );
+  }
+}
+
+class AutoPlaySwitch extends ConsumerWidget {
+  final double labelWidth;
+
+  const AutoPlaySwitch({required this.labelWidth, super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timerController = ref.read(timerProvider.notifier);
+    final autoPlay = ref.watch(timerProvider).value?.autoPlay ?? false;
+    final l10n = AppLocalizations.of(context)!;
+
+    return SettingItem(
+      label: l10n.autoPlay,
+      labelWidth: labelWidth,
+      isExpandedLabel: true,
+      suffixWidget: CupertinoSwitch(
+        value: autoPlay,
+        onChanged: timerController.setAutoPlay,
       ),
     );
   }

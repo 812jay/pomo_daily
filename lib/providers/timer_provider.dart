@@ -17,6 +17,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   late int workDuration;
   late int breakDuration;
   late int totalSets;
+  late bool autoPlay;
   late VibrationService _vibrationService;
   late TimerService _timerService;
 
@@ -24,7 +25,6 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   Future<TimerLocal> build() async {
     _timerService = ref.read(timerServiceProvider);
     final TimerLocal timerSetting = await setTimerSetting();
-
     return timerSetting;
   }
 
@@ -33,6 +33,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     workDuration = timerSetting['workDuration'] as int;
     breakDuration = timerSetting['breakDuration'] as int;
     totalSets = timerSetting['setCount'] as int;
+    autoPlay = timerSetting['autoPlay'] as bool;
 
     return _timerService.createInitialState(timerSetting);
   }
@@ -43,6 +44,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
       workDuration: workDuration,
       breakDuration: breakDuration,
       setCount: totalSets,
+      autoPlay: autoPlay,
     );
 
     // 설정 저장
@@ -59,6 +61,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
           currentSet: 1, // 첫 번째 세트로 초기화
           totalSets: totalSets, // 새로 설정된 totalSets 사용
           completedSets: 0, // 완료된 세트 초기화
+          autoPlay: currentState.autoPlay,
         ),
       );
     }
@@ -93,6 +96,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
         currentSet: 1,
         totalSets: currentState.totalSets,
         completedSets: 0,
+        autoPlay: currentState.autoPlay,
       ),
     );
   }
@@ -134,11 +138,9 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   Future<void> _handleSetCompletion() async {
     final currentState = state.value!;
     if (currentState.mode == TimerMode.work) {
-      // 작업 시간이 끝났을 때
       final newCompletedSets = currentState.completedSets + 1;
 
       if (newCompletedSets >= currentState.totalSets) {
-        // 모든 세트가 완료됨
         state = AsyncData(
           currentState.copyWith(
             status: TimerStatus.finished,
@@ -150,22 +152,36 @@ class TimerState extends AsyncNotifier<TimerLocal> {
         state = AsyncData(
           currentState.copyWith(
             duration: breakDuration,
-            status: TimerStatus.initial,
+            status: autoPlay ? TimerStatus.running : TimerStatus.paused,
             mode: TimerMode.shortBreak,
             completedSets: newCompletedSets,
           ),
         );
+        // autoPlay가 true일 때만 타이머 시작
+        if (autoPlay) {
+          _timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (_) => _countdown(),
+          );
+        }
       }
     } else {
-      // 휴식 시간이 끝났을 때
+      // 작업 시간으로 전환
       state = AsyncData(
         currentState.copyWith(
           duration: workDuration,
-          status: TimerStatus.initial,
+          status: autoPlay ? TimerStatus.running : TimerStatus.paused,
           mode: TimerMode.work,
           currentSet: currentState.currentSet + 1,
         ),
       );
+      // autoPlay가 true일 때만 타이머 시작
+      if (autoPlay) {
+        _timer = Timer.periodic(
+          const Duration(seconds: 1),
+          (_) => _countdown(),
+        );
+      }
     }
     await vibrate();
   }
@@ -181,6 +197,11 @@ class TimerState extends AsyncNotifier<TimerLocal> {
         await _vibrationService.getVibration()) {
       await Vibration.vibrate(duration: 700);
     }
+  }
+
+  void setAutoPlay(bool autoPlay) {
+    this.autoPlay = autoPlay;
+    state = AsyncData(state.value!.copyWith(autoPlay: autoPlay));
   }
 }
 

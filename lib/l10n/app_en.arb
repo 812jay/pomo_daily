@@ -13,5 +13,6 @@
   "breakTime": "Break Time",
   "sets": "Sets",
   "save": "Save",
-  "darkMode": "Dark Mode"
+  "darkMode": "Dark Mode",
+  "autoPlay": "Auto Play"
 } 

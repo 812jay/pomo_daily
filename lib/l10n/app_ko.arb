@@ -13,5 +13,6 @@
   "breakTime": "휴식 시간",
   "sets": "세트 수",
   "save": "저장",
-  "darkMode": "다크모드"
+  "darkMode": "다크모드",
+  "autoPlay": "자동 재생"
 } 

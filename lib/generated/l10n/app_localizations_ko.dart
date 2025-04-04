@@ -46,4 +46,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get darkMode => '다크모드';
+
+  @override
+  String get autoPlay => '자동 재생';
 }

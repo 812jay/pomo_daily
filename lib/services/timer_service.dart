@@ -8,7 +8,7 @@ class TimerService extends BaseStorageService {
   static const int _defaultWorkDuration = 25 * 60;
   static const int _defaultBreakDuration = 5 * 60;
   static const int _defaultSets = 5;
-
+  static const bool _defaultAutoPlay = false;
   Future<void> setTimer(TimerRequest payload) async {
     await setValue(_timerKey, payload.toJson());
   }
@@ -18,6 +18,7 @@ class TimerService extends BaseStorageService {
       'workDuration': _defaultWorkDuration,
       'breakDuration': _defaultBreakDuration,
       'setCount': _defaultSets,
+      'autoPlay': _defaultAutoPlay,
     };
 
     final Map rawSettings = await getValue<Map>(_timerKey, defaultSettings);
@@ -37,6 +38,7 @@ class TimerService extends BaseStorageService {
       currentSet: 1,
       totalSets: settings['setCount'] as int,
       completedSets: 0,
+      autoPlay: settings['autoPlay'] as bool,
     );
   }
 }
