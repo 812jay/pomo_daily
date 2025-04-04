@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
+import 'package:pomo_daily/data/models/timer/res/timer_config_model.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
 import 'package:pomo_daily/ui/widgets/common/custom_slider.dart';
@@ -14,20 +15,20 @@ class TimerSettingView extends ConsumerStatefulWidget {
   const TimerSettingView({super.key});
 
   @override
-  ConsumerState<TimerSettingView> createState() => _TimerSettingsScreenState();
+  ConsumerState<TimerSettingView> createState() => _TimerSettingsViewState();
 }
 
-class _TimerSettingsScreenState extends ConsumerState<TimerSettingView> {
-  late TimerSettings _settings;
+class _TimerSettingsViewState extends ConsumerState<TimerSettingView> {
+  late TimerConfigModel _settings;
 
   @override
   void initState() {
     super.initState();
     final timer = ref.read(timerProvider.notifier);
-    _settings = TimerSettings(
-      focusMinutes: timer.workDuration.toDoubleMinutes,
-      breakMinutes: timer.breakDuration.toDoubleMinutes,
-      sets: timer.totalSets.toDouble(),
+    _settings = TimerConfigModel(
+      workDuration: timer.workDuration.toDoubleMinutes,
+      breakDuration: timer.breakDuration.toDoubleMinutes,
+      setCount: timer.totalSets.toDouble(),
       autoPlay: timer.autoPlay,
     );
   }
@@ -35,9 +36,9 @@ class _TimerSettingsScreenState extends ConsumerState<TimerSettingView> {
   void _saveSettings() {
     final timer = ref.read(timerProvider.notifier);
     timer
-      ..setWorkDuration(_settings.focusMinutes)
-      ..setBreakDuration(_settings.breakMinutes)
-      ..setTotalSets(_settings.sets)
+      ..setWorkDuration(_settings.workDuration)
+      ..setBreakDuration(_settings.breakDuration)
+      ..setTotalSets(_settings.setCount)
       ..setAutoPlay(_settings.autoPlay)
       ..saveSettings();
     Navigator.pop(context);
@@ -66,37 +67,9 @@ class _TimerSettingsScreenState extends ConsumerState<TimerSettingView> {
   }
 }
 
-class TimerSettings {
-  final double focusMinutes;
-  final double breakMinutes;
-  final double sets;
-  final bool autoPlay;
-
-  const TimerSettings({
-    required this.focusMinutes,
-    required this.breakMinutes,
-    required this.sets,
-    required this.autoPlay,
-  });
-
-  TimerSettings copyWith({
-    double? focusMinutes,
-    double? breakMinutes,
-    double? sets,
-    bool? autoPlay,
-  }) {
-    return TimerSettings(
-      focusMinutes: focusMinutes ?? this.focusMinutes,
-      breakMinutes: breakMinutes ?? this.breakMinutes,
-      sets: sets ?? this.sets,
-      autoPlay: autoPlay ?? this.autoPlay,
-    );
-  }
-}
-
 class _SettingsContainer extends StatelessWidget {
-  final TimerSettings settings;
-  final ValueChanged<TimerSettings> onSettingsChanged;
+  final TimerConfigModel settings;
+  final ValueChanged<TimerConfigModel> onSettingsChanged;
 
   const _SettingsContainer({
     required this.settings,
@@ -117,23 +90,24 @@ class _SettingsContainer extends StatelessWidget {
         children: [
           _FocusTimeSlider(
             labelWidth: labelWidth,
-            value: settings.focusMinutes,
+            value: settings.workDuration,
             onChanged:
                 (value) =>
-                    onSettingsChanged(settings.copyWith(focusMinutes: value)),
+                    onSettingsChanged(settings.copyWith(workDuration: value)),
           ),
           _BreakTimeSlider(
             labelWidth: labelWidth,
-            value: settings.breakMinutes,
+            value: settings.breakDuration,
             onChanged:
                 (value) =>
-                    onSettingsChanged(settings.copyWith(breakMinutes: value)),
+                    onSettingsChanged(settings.copyWith(breakDuration: value)),
           ),
           _SetsSlider(
             labelWidth: labelWidth,
-            value: settings.sets,
+            value: settings.setCount,
             onChanged:
-                (value) => onSettingsChanged(settings.copyWith(sets: value)),
+                (value) =>
+                    onSettingsChanged(settings.copyWith(setCount: value)),
           ),
           _AutoPlaySwitch(
             labelWidth: labelWidth,

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
-import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
-import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
+import 'package:pomo_daily/data/models/timer/req/timer_request_model.dart';
+import 'package:pomo_daily/data/models/timer/res/timer_state_model.dart';
 import 'package:pomo_daily/services/timer_service.dart';
 import 'package:pomo_daily/services/vibration_service.dart';
 
@@ -12,7 +12,7 @@ import 'package:vibration/vibration.dart';
 final timerServiceProvider = Provider((ref) => TimerService());
 
 // 타이머 뷰모델
-class TimerState extends AsyncNotifier<TimerLocal> {
+class TimerState extends AsyncNotifier<TimerStateModel> {
   Timer? _timer;
   late int workDuration;
   late int breakDuration;
@@ -22,25 +22,26 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   late TimerService _timerService;
 
   @override
-  Future<TimerLocal> build() async {
+  Future<TimerStateModel> build() async {
     _timerService = ref.read(timerServiceProvider);
-    final TimerLocal timerSetting = await setTimerSetting();
-    return timerSetting;
+    final TimerStateModel timerState = await setTimerSetting();
+    return timerState;
   }
 
-  Future<TimerLocal> setTimerSetting() async {
-    final timerSetting = await _timerService.getTimerSettings();
-    workDuration = timerSetting['workDuration'] as int;
-    breakDuration = timerSetting['breakDuration'] as int;
-    totalSets = timerSetting['setCount'] as int;
-    autoPlay = timerSetting['autoPlay'] as bool;
+  Future<TimerStateModel> setTimerSetting() async {
+    final timerConfig = await _timerService.getTimerSettings();
+    workDuration = timerConfig.workDuration.toInt();
+    breakDuration = timerConfig.breakDuration.toInt();
+    totalSets = timerConfig.setCount.toInt();
+    autoPlay = timerConfig.autoPlay;
 
-    return _timerService.createInitialState(timerSetting);
+    return _timerService.createInitialState(timerConfig);
   }
 
   // 설정 저장 메서드
   Future<void> saveSettings() async {
-    final payload = TimerRequest(
+    _timer?.cancel();
+    final request = TimerRequestModel(
       workDuration: workDuration,
       breakDuration: breakDuration,
       setCount: totalSets,
@@ -48,19 +49,19 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     );
 
     // 설정 저장
-    await _timerService.setTimer(payload);
+    await _timerService.setTimer(request);
 
     // 현재 상태 리셋
     final currentState = state.value;
     if (currentState != null) {
       state = AsyncData(
-        TimerLocal(
-          duration: workDuration, // 새로 설정된 workDuration 사용
+        TimerStateModel(
+          duration: workDuration,
           status: TimerStatus.initial,
-          mode: TimerMode.work, // 작업 모드로 초기화
-          currentSet: 1, // 첫 번째 세트로 초기화
-          totalSets: totalSets, // 새로 설정된 totalSets 사용
-          completedSets: 0, // 완료된 세트 초기화
+          mode: TimerMode.work,
+          currentSet: 1,
+          totalSets: totalSets,
+          completedSets: 0,
           autoPlay: currentState.autoPlay,
         ),
       );
@@ -89,7 +90,7 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     _timer?.cancel();
     final currentState = state.value!;
     state = AsyncData(
-      TimerLocal(
+      TimerStateModel(
         duration: workDuration,
         status: TimerStatus.initial,
         mode: TimerMode.work,
@@ -206,6 +207,6 @@ class TimerState extends AsyncNotifier<TimerLocal> {
 }
 
 // Provider 정의
-final timerProvider = AsyncNotifierProvider<TimerState, TimerLocal>(
+final timerProvider = AsyncNotifierProvider<TimerState, TimerStateModel>(
   () => TimerState(),
 );

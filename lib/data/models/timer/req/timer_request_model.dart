@@ -1,5 +1,5 @@
-class TimerRequest {
-  TimerRequest({
+class TimerRequestModel {
+  TimerRequestModel({
     required this.workDuration,
     required this.breakDuration,
     required this.setCount,
@@ -10,8 +10,8 @@ class TimerRequest {
   final int setCount;
   final bool autoPlay;
 
-  factory TimerRequest.fromJson(Map<String, dynamic> json) {
-    return TimerRequest(
+  factory TimerRequestModel.fromJson(Map<String, dynamic> json) {
+    return TimerRequestModel(
       workDuration: json['workDuration'],
       breakDuration: json['breakDuration'],
       setCount: json['setCount'],
@@ -27,5 +27,4 @@ class TimerRequest {
       'autoPlay': autoPlay,
     };
   }
-
 }

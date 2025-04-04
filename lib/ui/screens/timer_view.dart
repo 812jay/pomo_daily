@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
-import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
+import 'package:pomo_daily/data/models/timer/res/timer_state_model.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
@@ -41,7 +41,7 @@ class _LoadingView extends StatelessWidget {
 class _TimerContent extends StatelessWidget {
   const _TimerContent({required this.timer, required this.timerController});
 
-  final TimerLocal timer;
+  final TimerStateModel timer;
   final TimerState timerController;
 
   @override
@@ -148,7 +148,7 @@ class _SetDot extends StatelessWidget {
 class _ControlButtons extends StatelessWidget {
   const _ControlButtons({required this.timer, required this.timerController});
 
-  final TimerLocal timer;
+  final TimerStateModel timer;
   final TimerState timerController;
 
   @override
