@@ -6,7 +6,7 @@ import 'package:pomo_daily/providers/theme_provider.dart';
 import 'package:pomo_daily/services/theme_service.dart';
 import 'package:pomo_daily/services/vibration_service.dart';
 import 'package:pomo_daily/ui/screens/home_view.dart';
-import 'package:pomo_daily/ui/screens/setting/timer/setting_timer_view.dart';
+import 'package:pomo_daily/ui/screens/setting/timer/timer_setting_view.dart';
 import 'package:pomo_daily/ui/screens/splash_view.dart';
 import 'package:pomo_daily/config/theme/app_theme.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
@@ -67,7 +67,7 @@ class MyApp extends ConsumerWidget {
           case '/home':
             return MaterialPageRoute(builder: (_) => const HomeView());
           case '/setting/timer':
-            return MaterialPageRoute(builder: (_) => const SettingTimerView());
+            return MaterialPageRoute(builder: (_) => const TimerSettingView());
         }
         return null;
       },
