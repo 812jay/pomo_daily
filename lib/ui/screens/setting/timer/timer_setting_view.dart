@@ -230,7 +230,7 @@ class _AutoPlaySwitch extends StatelessWidget {
 class _SaveButton extends StatelessWidget {
   final VoidCallback onSave;
 
-  const _SaveButton({required this.onSave, super.key});
+  const _SaveButton({required this.onSave});
 
   @override
   Widget build(BuildContext context) {
