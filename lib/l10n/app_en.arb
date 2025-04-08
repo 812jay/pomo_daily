@@ -14,5 +14,12 @@
   "sets": "Sets",
   "save": "Save",
   "darkMode": "Dark Mode",
-  "autoPlay": "Auto Play"
+  "autoPlay": "Auto Play",
+  "completionTitle": "Congratulations! 🎉",
+  "completionSubtitle": "You've completed today's routine!",
+  "totalFocusTime": "Total Focus Time",
+  "totalBreakTime": "Total Break Time",
+  "totalSets": "Total Sets",
+  "minuteUnit": "min",
+  "setUnit": "sets"
 } 

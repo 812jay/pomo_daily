@@ -7,6 +7,7 @@ import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
 import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_completion_dialog.dart';
 
 class TimerView extends ConsumerWidget {
   const TimerView({super.key});
@@ -15,6 +16,17 @@ class TimerView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final timerState = ref.watch(timerProvider);
     final timerController = ref.read(timerProvider.notifier);
+
+    ref.listen<AsyncValue<TimerStateModel>>(timerProvider, (previous, next) {
+      if (next.value?.status == TimerStatus.finished) {
+        TimerCompletionDialog.show(
+          context: context,
+          workDuration: timerController.workDuration,
+          breakDuration: timerController.breakDuration,
+          totalSets: timerController.totalSets,
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: context.colors.background,

@@ -14,5 +14,12 @@
   "sets": "세트 수",
   "save": "저장",
   "darkMode": "다크모드",
-  "autoPlay": "자동 재생"
+  "autoPlay": "자동 재생",
+  "completionTitle": "축하합니다! 🎉",
+  "completionSubtitle": "오늘의 루틴을 완료했습니다!",
+  "totalFocusTime": "총 집중 시간",
+  "totalBreakTime": "총 휴식 시간",
+  "totalSets": "총 세트 수",
+  "minuteUnit": "분",
+  "setUnit": "세트"
 } 
