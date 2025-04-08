@@ -15,6 +15,30 @@ class TimerService extends BaseStorageService {
     await setValue(_timerKey, payload.toJson());
   }
 
+  Future<void> initializeTimerSetting() async {
+    final box = await openBox();
+    final defaultSettings =
+        TimerRequestModel(
+          workDuration: _defaultWorkDuration,
+          breakDuration: _defaultBreakDuration,
+          setCount: _defaultSets,
+          autoPlay: _defaultAutoPlay,
+        ).toJson();
+
+    if (box.containsKey(_timerKey)) {
+      final currentSettings = Map<String, dynamic>.from(box.get(_timerKey));
+      // 누락된 값만 기본값으로 채움
+      defaultSettings.forEach((key, value) {
+        if (!currentSettings.containsKey(key) || currentSettings[key] == null) {
+          currentSettings[key] = value;
+          setValue(_timerKey, currentSettings);
+        }
+      });
+    } else {
+      await setValue(_timerKey, defaultSettings);
+    }
+  }
+
   Future<TimerConfigModel> getTimerSettings() async {
     final defaultSettings = {
       'workDuration': _defaultWorkDuration,
@@ -37,7 +61,7 @@ class TimerService extends BaseStorageService {
     await deleteValue(_timerKey);
   }
 
-  TimerStateModel createInitialState(TimerConfigModel settings) {
+  TimerStateModel getInitialState(TimerConfigModel settings) {
     return TimerStateModel(
       duration: settings.workDuration.toInt(),
       status: TimerStatus.initial,

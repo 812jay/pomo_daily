@@ -10,9 +10,11 @@ import 'package:pomo_daily/services/vibration_service.dart';
 import 'package:vibration/vibration.dart';
 
 final timerServiceProvider = Provider((ref) => TimerService());
+final vibrationServiceProvider = Provider((ref) => VibrationService());
 
 // 타이머 뷰모델
 class TimerState extends AsyncNotifier<TimerStateModel> {
+  static bool _isInitialized = false;
   Timer? _timer;
   late int workDuration;
   late int breakDuration;
@@ -23,19 +25,28 @@ class TimerState extends AsyncNotifier<TimerStateModel> {
 
   @override
   Future<TimerStateModel> build() async {
+    _vibrationService = ref.read(vibrationServiceProvider);
     _timerService = ref.read(timerServiceProvider);
-    final TimerStateModel timerState = await setTimerSetting();
+
+    if (!_isInitialized) {
+      await _timerService.initializeTimerSetting();
+      _isInitialized = true;
+    }
+
+    final TimerStateModel timerState = await getTimerSetting();
     return timerState;
   }
 
-  Future<TimerStateModel> setTimerSetting() async {
+  Future<TimerStateModel> getTimerSetting() async {
     final timerConfig = await _timerService.getTimerSettings();
+
+    // 클래스 변수들 초기화 추가
     workDuration = timerConfig.workDuration.toInt();
     breakDuration = timerConfig.breakDuration.toInt();
     totalSets = timerConfig.setCount.toInt();
     autoPlay = timerConfig.autoPlay;
 
-    return _timerService.createInitialState(timerConfig);
+    return _timerService.getInitialState(timerConfig);
   }
 
   // 설정 저장 메서드
