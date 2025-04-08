@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
+import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
 
 class TimerCompletionDialog extends StatelessWidget {
@@ -20,6 +21,7 @@ class TimerCompletionDialog extends StatelessWidget {
     return showDialog(
       context: context,
       barrierDismissible: true,
+      barrierColor: context.colors.dialogBarrier,
       builder:
           (context) => TimerCompletionDialog(
             workDuration: workDuration,
@@ -36,7 +38,11 @@ class TimerCompletionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: context.colors.dialogBackground,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: context.colors.border),
+      ),
       contentPadding: const EdgeInsets.all(16),
       content: Stack(
         alignment: Alignment.center,
@@ -100,9 +106,19 @@ class _DialogTitle extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        Text(l10n.completionTitle, style: AppTextStyles.headline2),
+        Text(
+          l10n.completionTitle,
+          style: AppTextStyles.headline2.copyWith(
+            color: context.colors.textPrimary,
+          ),
+        ),
         const SizedBox(height: 8),
-        Text(l10n.completionSubtitle, style: AppTextStyles.body1),
+        Text(
+          l10n.completionSubtitle,
+          style: AppTextStyles.body1.copyWith(
+            color: context.colors.textPrimary,
+          ),
+        ),
       ],
     );
   }
@@ -136,16 +152,22 @@ class _TimerStats extends StatelessWidget {
       children: [
         Text(
           '${l10n.totalFocusTime}: $totalFocusTime${l10n.minuteUnit}',
-          style: AppTextStyles.body1,
+          style: AppTextStyles.body1.copyWith(
+            color: context.colors.textPrimary,
+          ),
         ),
         if (_totalBreakTime > 0) // 휴식 시간이 있을 때만 표시
           Text(
             '${l10n.totalBreakTime}: $totalBreakTime${l10n.minuteUnit}',
-            style: AppTextStyles.body1,
+            style: AppTextStyles.body1.copyWith(
+              color: context.colors.textPrimary,
+            ),
           ),
         Text(
           '${l10n.totalSets}: $totalSets${l10n.setUnit}',
-          style: AppTextStyles.body1,
+          style: AppTextStyles.body1.copyWith(
+            color: context.colors.textPrimary,
+          ),
         ),
       ],
     );

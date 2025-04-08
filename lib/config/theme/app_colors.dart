@@ -28,6 +28,13 @@ class AppColors {
   static const completedDotColor = Color(0xFF4CAF50);
   static const uncompletedDotColor = Color(0xFFE5E7EB);
 
+  // Dialog 색상
+  static const dialogBackground = Color(0xFFF9FAFB);
+
+  // Dialog barrier 색상
+  static const dialogBarrierLight = Color(0x8A000000); // 기본값 black54
+  static const dialogBarrierDark = Color(0x1AFFFFFF); // 흰색 10% 투명도
+
   // ---------- Dark Theme Colors ----------
 
   static const primaryColorDark = Color(0xFF8CD3A7); // 밝은 녹색
@@ -44,4 +51,7 @@ class AppColors {
   // 다크모드 점 색상
   static const completedDotColorDark = Color(0xFF66BB6A); // 밝은 초록
   static const uncompletedDotColorDark = Color(0xFFB0B0B0); // 어두운 회색
+
+  // 다크모드 Dialog 색상
+  static const dialogBackgroundDark = Color(0xFF121212);
 }

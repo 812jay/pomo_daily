@@ -13,6 +13,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.completedDot,
     required this.uncompletedDot,
     required this.error,
+    required this.dialogBackground,
+    required this.dialogBarrier,
   });
 
   final Color iconPrimary;
@@ -24,6 +26,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
   final Color completedDot;
   final Color uncompletedDot;
   final Color error;
+  final Color dialogBackground;
+  final Color dialogBarrier;
   // 라이트 테마용 색상
   static const light = CustomColors(
     iconPrimary: AppColors.iconPrimary,
@@ -35,6 +39,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     completedDot: AppColors.completedDotColor,
     uncompletedDot: AppColors.uncompletedDotColor,
     error: AppColors.error,
+    dialogBackground: AppColors.dialogBackground,
+    dialogBarrier: AppColors.dialogBarrierLight,
   );
 
   // 다크 테마용 색상
@@ -48,6 +54,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     completedDot: AppColors.completedDotColorDark,
     uncompletedDot: AppColors.uncompletedDotColorDark,
     error: AppColors.error,
+    dialogBackground: AppColors.dialogBackgroundDark,
+    dialogBarrier: AppColors.dialogBarrierDark,
   );
 
   @override
@@ -61,6 +69,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? completedDot,
     Color? uncompletedDot,
     Color? error,
+    Color? dialogBackground,
+    Color? dialogBarrier,
   }) {
     return CustomColors(
       iconPrimary: iconPrimary ?? this.iconPrimary,
@@ -72,6 +82,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
       completedDot: completedDot ?? this.completedDot,
       uncompletedDot: uncompletedDot ?? this.uncompletedDot,
       error: error ?? this.error,
+      dialogBackground: dialogBackground ?? this.dialogBackground,
+      dialogBarrier: dialogBarrier ?? this.dialogBarrier,
     );
   }
 
@@ -91,6 +103,9 @@ class CustomColors extends ThemeExtension<CustomColors> {
       completedDot: Color.lerp(completedDot, other.completedDot, t)!,
       uncompletedDot: Color.lerp(uncompletedDot, other.uncompletedDot, t)!,
       error: Color.lerp(error, other.error, t)!,
+      dialogBackground:
+          Color.lerp(dialogBackground, other.dialogBackground, t)!,
+      dialogBarrier: Color.lerp(dialogBarrier, other.dialogBarrier, t)!,
     );
   }
 }
