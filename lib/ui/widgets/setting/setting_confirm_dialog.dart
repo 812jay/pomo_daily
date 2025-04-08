@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
+import 'package:pomo_daily/ui/widgets/common/action_button.dart';
 
 class SettingConfirmDialog extends StatelessWidget {
   const SettingConfirmDialog({super.key});
@@ -25,7 +26,8 @@ class SettingConfirmDialog extends StatelessWidget {
       ),
       title: _DialogTitle(),
       content: _DialogContent(),
-      actions: const [_CancelButton(), _SaveButton()],
+      actionsAlignment: MainAxisAlignment.end,
+      actions: const [_DialogActions()],
     );
   }
 }
@@ -56,36 +58,32 @@ class _DialogContent extends StatelessWidget {
   }
 }
 
-class _CancelButton extends StatelessWidget {
-  const _CancelButton();
+class _DialogActions extends StatelessWidget {
+  const _DialogActions();
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return TextButton(
-      onPressed: () => Navigator.pop(context, false),
-      child: Text(
-        l10n.cancel,
-        style: AppTextStyles.body1.copyWith(color: context.colors.textPrimary),
-      ),
-    );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  const _SaveButton();
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return TextButton(
-      onPressed: () => Navigator.pop(context, true),
-      child: Text(
-        l10n.saveConfirm,
-        style: AppTextStyles.body1.copyWith(color: context.colors.textPrimary),
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // 취소 버튼
+        ActionButton(
+          label: l10n.cancel,
+          onPressed: () => Navigator.pop(context, false),
+          margin: EdgeInsets.zero,
+          textStyle: AppTextStyles.body2,
+        ),
+        const SizedBox(width: 8),
+        // 저장 버튼
+        ActionButton(
+          label: l10n.saveConfirm,
+          onPressed: () => Navigator.pop(context, true),
+          margin: EdgeInsets.zero,
+          textStyle: AppTextStyles.body2,
+        ),
+      ],
     );
   }
 }

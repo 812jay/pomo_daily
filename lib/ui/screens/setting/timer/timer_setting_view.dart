@@ -12,7 +12,7 @@ import 'package:pomo_daily/ui/widgets/setting/setting_confirm_dialog.dart';
 import 'package:pomo_daily/ui/widgets/setting/setting_item.dart';
 import 'package:pomo_daily/utils/duration_extensions.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
-import 'package:pomo_daily/utils/logger.dart';
+import 'package:pomo_daily/ui/widgets/common/action_button.dart';
 
 class TimerSettingView extends ConsumerStatefulWidget {
   const TimerSettingView({super.key});
@@ -87,7 +87,10 @@ class _TimerSettingViewState extends ConsumerState<TimerSettingView> {
                 onSettingsChanged: _updateSettings,
               ),
               const SizedBox(height: 20),
-              _SaveButton(onSave: _saveSettings),
+              ActionButton(
+                label: AppLocalizations.of(context)!.save,
+                onPressed: _saveSettings,
+              ),
             ],
           ),
         ),
@@ -281,41 +284,6 @@ class _AutoPlaySwitch extends StatelessWidget {
       labelWidth: labelWidth,
       isExpandedLabel: true,
       suffixWidget: CupertinoSwitch(value: value, onChanged: onChanged),
-    );
-  }
-}
-
-class _SaveButton extends StatelessWidget {
-  final VoidCallback onSave;
-
-  const _SaveButton({required this.onSave});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      alignment: Alignment.centerRight,
-      child: TextButton(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(context.colors.background),
-          shadowColor: WidgetStateProperty.all(context.colors.border),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: context.colors.border),
-            ),
-          ),
-        ),
-        onPressed: onSave,
-        child: Text(
-          l10n.save,
-          style: AppTextStyles.body1.copyWith(
-            color: context.colors.textPrimary,
-          ),
-        ),
-      ),
     );
   }
 }
