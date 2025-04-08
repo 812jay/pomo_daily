@@ -2,28 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
+import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/data/models/timer/res/timer_config_model.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
 import 'package:pomo_daily/ui/widgets/common/custom_slider.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
+import 'package:pomo_daily/ui/widgets/setting/setting_confirm_dialog.dart';
 import 'package:pomo_daily/ui/widgets/setting/setting_item.dart';
 import 'package:pomo_daily/utils/duration_extensions.dart';
 import 'package:pomo_daily/generated/l10n/app_localizations.dart';
+import 'package:pomo_daily/utils/logger.dart';
 
 class TimerSettingView extends ConsumerStatefulWidget {
   const TimerSettingView({super.key});
 
   @override
-  ConsumerState<TimerSettingView> createState() => _TimerSettingsViewState();
+  ConsumerState<TimerSettingView> createState() => _TimerSettingViewState();
 }
 
-class _TimerSettingsViewState extends ConsumerState<TimerSettingView> {
+class _TimerSettingViewState extends ConsumerState<TimerSettingView> {
   late TimerConfigModel _settings;
 
   @override
   void initState() {
     super.initState();
+    _loadCurrentSettings();
+  }
+
+  void _loadCurrentSettings() {
     final timer = ref.read(timerProvider.notifier);
     _settings = TimerConfigModel(
       workDuration: timer.workDuration.toDoubleMinutes,
@@ -33,7 +40,17 @@ class _TimerSettingsViewState extends ConsumerState<TimerSettingView> {
     );
   }
 
-  void _saveSettings() {
+  void _updateSettings(TimerConfigModel settings) {
+    setState(() => _settings = settings);
+  }
+
+  Future<void> _saveSettings() async {
+    if (!await _confirmSaveIfNeeded() || !mounted) return;
+    _applySettings();
+    if (mounted) Navigator.pop(context);
+  }
+
+  void _applySettings() {
     final timer = ref.read(timerProvider.notifier);
     timer
       ..setWorkDuration(_settings.workDuration)
@@ -41,37 +58,87 @@ class _TimerSettingsViewState extends ConsumerState<TimerSettingView> {
       ..setTotalSets(_settings.setCount)
       ..setAutoPlay(_settings.autoPlay)
       ..saveSettings();
-    Navigator.pop(context);
+  }
+
+  Future<bool> _confirmSaveIfNeeded() async {
+    final timerStatus = ref.read(timerProvider).value?.status;
+
+    // 타이머가 initial 상태가 아닐 때만 확인 다이얼로그 표시
+    if (timerStatus != null && timerStatus != TimerStatus.initial) {
+      final confirmed = await SettingConfirmDialog.show(context: context);
+      return confirmed ?? false;
+    }
+
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Header(),
-            const SizedBox(height: 20),
-            _SettingsContainer(
-              settings: _settings,
-              onSettingsChanged:
-                  (settings) => setState(() => _settings = settings),
-            ),
-            const SizedBox(height: 20),
-            _SaveButton(onSave: _saveSettings),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _Header(),
+              const SizedBox(height: 20),
+              _SettingsForm(
+                settings: _settings,
+                onSettingsChanged: _updateSettings,
+              ),
+              const SizedBox(height: 20),
+              _SaveButton(onSave: _saveSettings),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _SettingsContainer extends StatelessWidget {
+class _SettingsForm extends StatelessWidget {
   final TimerConfigModel settings;
   final ValueChanged<TimerConfigModel> onSettingsChanged;
 
-  const _SettingsContainer({
+  const _SettingsForm({
+    required this.settings,
+    required this.onSettingsChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _SettingsContainer(
+      child: _SettingsContent(
+        settings: settings,
+        onSettingsChanged: onSettingsChanged,
+      ),
+    );
+  }
+}
+
+class _SettingsContainer extends StatelessWidget {
+  final Widget child;
+
+  const _SettingsContainer({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      decoration: BoxDecoration(
+        border: Border.all(color: context.colors.border),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _SettingsContent extends StatelessWidget {
+  final TimerConfigModel settings;
+  final ValueChanged<TimerConfigModel> onSettingsChanged;
+
+  const _SettingsContent({
     required this.settings,
     required this.onSettingsChanged,
   });
@@ -80,44 +147,35 @@ class _SettingsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelWidth = MediaQuery.of(context).size.width * 0.2;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
-        border: Border.all(color: context.colors.border),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          _FocusTimeSlider(
-            labelWidth: labelWidth,
-            value: settings.workDuration,
-            onChanged:
-                (value) =>
-                    onSettingsChanged(settings.copyWith(workDuration: value)),
-          ),
-          _BreakTimeSlider(
-            labelWidth: labelWidth,
-            value: settings.breakDuration,
-            onChanged:
-                (value) =>
-                    onSettingsChanged(settings.copyWith(breakDuration: value)),
-          ),
-          _SetsSlider(
-            labelWidth: labelWidth,
-            value: settings.setCount,
-            onChanged:
-                (value) =>
-                    onSettingsChanged(settings.copyWith(setCount: value)),
-          ),
-          _AutoPlaySwitch(
-            labelWidth: labelWidth,
-            value: settings.autoPlay,
-            onChanged:
-                (value) =>
-                    onSettingsChanged(settings.copyWith(autoPlay: value)),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        _FocusTimeSlider(
+          labelWidth: labelWidth,
+          value: settings.workDuration,
+          onChanged:
+              (value) =>
+                  onSettingsChanged(settings.copyWith(workDuration: value)),
+        ),
+        _BreakTimeSlider(
+          labelWidth: labelWidth,
+          value: settings.breakDuration,
+          onChanged:
+              (value) =>
+                  onSettingsChanged(settings.copyWith(breakDuration: value)),
+        ),
+        _SetsSlider(
+          labelWidth: labelWidth,
+          value: settings.setCount,
+          onChanged:
+              (value) => onSettingsChanged(settings.copyWith(setCount: value)),
+        ),
+        _AutoPlaySwitch(
+          labelWidth: labelWidth,
+          value: settings.autoPlay,
+          onChanged:
+              (value) => onSettingsChanged(settings.copyWith(autoPlay: value)),
+        ),
+      ],
     );
   }
 }

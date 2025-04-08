@@ -70,4 +70,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setUnit => 'sets';
+
+  @override
+  String get timerSettingSaveTitle => 'Save Timer Settings';
+
+  @override
+  String get timerSettingSaveContent => 'Changing timer settings will reset the running timer. Do you want to save?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get saveConfirm => 'Save';
 }

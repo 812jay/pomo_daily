@@ -220,6 +220,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'sets'**
   String get setUnit;
+
+  /// No description provided for @timerSettingSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Timer Settings'**
+  String get timerSettingSaveTitle;
+
+  /// No description provided for @timerSettingSaveContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing timer settings will reset the running timer. Do you want to save?'**
+  String get timerSettingSaveContent;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @saveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveConfirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

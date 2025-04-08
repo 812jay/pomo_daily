@@ -21,5 +21,9 @@
   "totalBreakTime": "총 휴식 시간",
   "totalSets": "총 세트 수",
   "minuteUnit": "분",
-  "setUnit": "세트"
+  "setUnit": "세트",
+  "timerSettingSaveTitle": "타이머 설정 저장",
+  "timerSettingSaveContent": "타이머 설정을 변경하면 실행 중인 타이머가 초기화됩니다. 저장 하시겠어요?",
+  "cancel": "취소",
+  "saveConfirm": "저장"
 } 

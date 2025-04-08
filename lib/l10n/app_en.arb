@@ -21,5 +21,9 @@
   "totalBreakTime": "Total Break Time",
   "totalSets": "Total Sets",
   "minuteUnit": "min",
-  "setUnit": "sets"
+  "setUnit": "sets",
+  "timerSettingSaveTitle": "Save Timer Settings",
+  "timerSettingSaveContent": "Changing timer settings will reset the running timer. Do you want to save?",
+  "cancel": "Cancel",
+  "saveConfirm": "Save"
 } 

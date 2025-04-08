@@ -19,6 +19,7 @@ extension TimerModeExtension on TimerMode {
 enum TimerStatus { initial, running, paused, finished }
 
 extension TimerStatusExtension on TimerStatus {
+  bool get isInitial => this == TimerStatus.initial;
   bool get isPaused => this == TimerStatus.paused;
   bool get isRunning => this == TimerStatus.running;
   bool get isFinished => this == TimerStatus.finished;

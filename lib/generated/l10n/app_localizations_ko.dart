@@ -70,4 +70,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get setUnit => '세트';
+
+  @override
+  String get timerSettingSaveTitle => '타이머 설정 저장';
+
+  @override
+  String get timerSettingSaveContent => '타이머 설정을 변경하면 실행 중인 타이머가 초기화됩니다. 저장 하시겠어요?';
+
+  @override
+  String get cancel => '취소';
+
+  @override
+  String get saveConfirm => '저장';
 }
