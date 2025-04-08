@@ -23,6 +23,7 @@ class TimerSettingView extends ConsumerStatefulWidget {
 
 class _TimerSettingViewState extends ConsumerState<TimerSettingView> {
   late TimerConfigModel _settings;
+  late TimerConfigModel _initialSettings;
 
   @override
   void initState() {
@@ -32,19 +33,27 @@ class _TimerSettingViewState extends ConsumerState<TimerSettingView> {
 
   void _loadCurrentSettings() {
     final timer = ref.read(timerProvider.notifier);
-    _settings = TimerConfigModel(
+    _initialSettings = TimerConfigModel(
       workDuration: timer.workDuration.toDoubleMinutes,
       breakDuration: timer.breakDuration.toDoubleMinutes,
       setCount: timer.totalSets.toDouble(),
       autoPlay: timer.autoPlay,
     );
+    _settings = _initialSettings.copyWith();
   }
 
   void _updateSettings(TimerConfigModel settings) {
     setState(() => _settings = settings);
   }
 
+  bool get _hasChanges =>
+      _settings.workDuration != _initialSettings.workDuration ||
+      _settings.breakDuration != _initialSettings.breakDuration ||
+      _settings.setCount != _initialSettings.setCount ||
+      _settings.autoPlay != _initialSettings.autoPlay;
+
   Future<void> _saveSettings() async {
+    if (!_hasChanges) return;
     if (!await _confirmSaveIfNeeded() || !mounted) return;
     _applySettings();
     if (mounted) Navigator.pop(context);
@@ -89,7 +98,7 @@ class _TimerSettingViewState extends ConsumerState<TimerSettingView> {
               const SizedBox(height: 20),
               ActionButton(
                 label: AppLocalizations.of(context)!.save,
-                onPressed: _saveSettings,
+                onPressed: _hasChanges ? _saveSettings : null,
               ),
             ],
           ),

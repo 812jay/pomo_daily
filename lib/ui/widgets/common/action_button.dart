@@ -4,7 +4,7 @@ import 'package:pomo_daily/config/theme/custom_colors.dart';
 
 class ActionButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final EdgeInsetsGeometry? margin;
   final Alignment alignment;
   final double? width;
@@ -14,7 +14,7 @@ class ActionButton extends StatelessWidget {
   const ActionButton({
     super.key,
     required this.label,
-    required this.onPressed,
+    this.onPressed,
     this.margin = const EdgeInsets.symmetric(horizontal: 24),
     this.alignment = Alignment.centerRight,
     this.width,
@@ -24,29 +24,34 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = onPressed == null;
+
     return Container(
       margin: margin,
       alignment: alignment,
-      child: TextButton(
-        style: ButtonStyle(
-          minimumSize:
-              width != null || height != null
-                  ? WidgetStateProperty.all(Size(width ?? 0, height ?? 36))
-                  : null,
-          backgroundColor: WidgetStateProperty.all(context.colors.background),
-          shadowColor: WidgetStateProperty.all(context.colors.border),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: context.colors.border),
+      child: Opacity(
+        opacity: isDisabled ? 0.5 : 1.0,
+        child: TextButton(
+          style: ButtonStyle(
+            minimumSize:
+                width != null || height != null
+                    ? WidgetStateProperty.all(Size(width ?? 0, height ?? 36))
+                    : null,
+            backgroundColor: WidgetStateProperty.all(context.colors.background),
+            shadowColor: WidgetStateProperty.all(context.colors.border),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: context.colors.border),
+              ),
             ),
           ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: (textStyle ?? AppTextStyles.body1).copyWith(
-            color: context.colors.textPrimary,
+          onPressed: onPressed,
+          child: Text(
+            label,
+            style: (textStyle ?? AppTextStyles.body1).copyWith(
+              color: context.colors.textPrimary,
+            ),
           ),
         ),
       ),
