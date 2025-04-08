@@ -178,6 +178,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auto Play'**
   String get autoPlay;
+
+  /// No description provided for @completionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! 🎉'**
+  String get completionTitle;
+
+  /// No description provided for @completionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve completed today\'s routine!'**
+  String get completionSubtitle;
+
+  /// No description provided for @totalFocusTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Focus Time'**
+  String get totalFocusTime;
+
+  /// No description provided for @totalBreakTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Break Time'**
+  String get totalBreakTime;
+
+  /// No description provided for @totalSets.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Sets'**
+  String get totalSets;
+
+  /// No description provided for @minuteUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get minuteUnit;
+
+  /// No description provided for @setUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'sets'**
+  String get setUnit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

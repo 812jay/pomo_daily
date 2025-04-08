@@ -49,4 +49,25 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get autoPlay => '자동 재생';
+
+  @override
+  String get completionTitle => '축하합니다! 🎉';
+
+  @override
+  String get completionSubtitle => '오늘의 루틴을 완료했습니다!';
+
+  @override
+  String get totalFocusTime => '총 집중 시간';
+
+  @override
+  String get totalBreakTime => '총 휴식 시간';
+
+  @override
+  String get totalSets => '총 세트 수';
+
+  @override
+  String get minuteUnit => '분';
+
+  @override
+  String get setUnit => '세트';
 }

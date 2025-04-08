@@ -49,4 +49,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoPlay => 'Auto Play';
+
+  @override
+  String get completionTitle => 'Congratulations! 🎉';
+
+  @override
+  String get completionSubtitle => 'You\'ve completed today\'s routine!';
+
+  @override
+  String get totalFocusTime => 'Total Focus Time';
+
+  @override
+  String get totalBreakTime => 'Total Break Time';
+
+  @override
+  String get totalSets => 'Total Sets';
+
+  @override
+  String get minuteUnit => 'min';
+
+  @override
+  String get setUnit => 'sets';
 }

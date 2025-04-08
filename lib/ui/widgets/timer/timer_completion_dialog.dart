@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pomo_daily/config/theme/app_text_styles.dart';
+import 'package:pomo_daily/generated/l10n/app_localizations.dart';
 
 class TimerCompletionDialog extends StatelessWidget {
   const TimerCompletionDialog({
@@ -66,25 +67,27 @@ class _DialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Lottie.asset(
-          'assets/lotties/dancing_dog.json',
-          width: 150,
-          height: 150,
-          fit: BoxFit.contain,
-          repeat: true,
-        ),
-        const _DialogTitle(),
-        const SizedBox(height: 16),
-        _TimerStats(
-          workDuration: workDuration,
-          breakDuration: breakDuration,
-          totalSets: totalSets,
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            'assets/lotties/dancing_dog.json',
+            width: 150,
+            height: 150,
+            fit: BoxFit.contain,
+            repeat: true,
+          ),
+          const _DialogTitle(),
+          const SizedBox(height: 16),
+          _TimerStats(
+            workDuration: workDuration,
+            breakDuration: breakDuration,
+            totalSets: totalSets,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -94,11 +97,12 @@ class _DialogTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
       children: [
-        Text('축하합니다! 🎉', style: AppTextStyles.headline2),
-        SizedBox(height: 8),
-        Text('오늘의 루틴을 완료했습니다!', style: AppTextStyles.body1),
+        Text(l10n.completionTitle, style: AppTextStyles.headline2),
+        const SizedBox(height: 8),
+        Text(l10n.completionSubtitle, style: AppTextStyles.body1),
       ],
     );
   }
@@ -125,15 +129,24 @@ class _TimerStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final totalFocusTime = _totalFocusTime ~/ 60;
+    final totalBreakTime = _totalBreakTime ~/ 60;
     return Column(
       children: [
-        Text('총 집중 시간: ${_totalFocusTime ~/ 60}분', style: AppTextStyles.body1),
+        Text(
+          '${l10n.totalFocusTime}: $totalFocusTime${l10n.minuteUnit}',
+          style: AppTextStyles.body1,
+        ),
         if (_totalBreakTime > 0) // 휴식 시간이 있을 때만 표시
           Text(
-            '총 휴식 시간: ${_totalBreakTime ~/ 60}분',
+            '${l10n.totalBreakTime}: $totalBreakTime${l10n.minuteUnit}',
             style: AppTextStyles.body1,
           ),
-        Text('총 세트 수: $totalSets세트', style: AppTextStyles.body1),
+        Text(
+          '${l10n.totalSets}: $totalSets${l10n.setUnit}',
+          style: AppTextStyles.body1,
+        ),
       ],
     );
   }
