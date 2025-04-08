@@ -82,4 +82,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveConfirm => 'Save';
+
+  @override
+  String get timerResetTitle => 'Reset Timer';
+
+  @override
+  String get timerResetContent => 'The current timer progress will be reset.\nDo you want to start over from the beginning?';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get timerSkipTitle => 'Skip Timer';
+
+  @override
+  String get timerSkipContent => 'Do you want to skip the current session\nand move to the next phase?';
 }

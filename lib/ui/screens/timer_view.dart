@@ -180,10 +180,14 @@ class _ControlButtons extends StatelessWidget {
               }
             },
           ),
-        if (timer.status.isFinished)
-          _ResetButton(onPressed: timerController.reset),
+        if (timer.status.isFinished || timer.status.isPaused)
+          _ResetButton(
+            onPressed: () => timerController.resetWithConfirm(context),
+          ),
         if (timer.status.isPaused)
-          _SkipButton(onPressed: timerController.skipToNextSet),
+          _SkipButton(
+            onPressed: () => timerController.skipWithConfirm(context),
+          ),
       ],
     );
   }

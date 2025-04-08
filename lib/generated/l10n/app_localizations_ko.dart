@@ -82,4 +82,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get saveConfirm => '저장';
+
+  @override
+  String get timerResetTitle => '타이머 초기화';
+
+  @override
+  String get timerResetContent => '현재 진행 중인 타이머가 초기화됩니다.\n처음부터 다시 시작하시겠어요?';
+
+  @override
+  String get confirm => '확인';
+
+  @override
+  String get timerSkipTitle => '타이머 건너뛰기';
+
+  @override
+  String get timerSkipContent => '현재 진행 중인 세션을 건너뛰고\n다음 단계로 이동하시겠어요?';
 }

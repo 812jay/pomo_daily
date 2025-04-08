@@ -244,6 +244,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get saveConfirm;
+
+  /// No description provided for @timerResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Timer'**
+  String get timerResetTitle;
+
+  /// No description provided for @timerResetContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The current timer progress will be reset.\nDo you want to start over from the beginning?'**
+  String get timerResetContent;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @timerSkipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip Timer'**
+  String get timerSkipTitle;
+
+  /// No description provided for @timerSkipContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to skip the current session\nand move to the next phase?'**
+  String get timerSkipContent;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

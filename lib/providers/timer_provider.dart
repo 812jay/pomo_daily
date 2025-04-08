@@ -6,8 +6,11 @@ import 'package:pomo_daily/data/models/timer/req/timer_request_model.dart';
 import 'package:pomo_daily/data/models/timer/res/timer_state_model.dart';
 import 'package:pomo_daily/services/timer_service.dart';
 import 'package:pomo_daily/services/vibration_service.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_reset_confirm_dialog.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_skip_confirm_dialog.dart';
 
 import 'package:vibration/vibration.dart';
+import 'package:flutter/material.dart';
 
 final timerServiceProvider = Provider((ref) => TimerService());
 final vibrationServiceProvider = Provider((ref) => VibrationService());
@@ -96,8 +99,25 @@ class TimerState extends AsyncNotifier<TimerStateModel> {
     state = AsyncData(currentState.copyWith(status: TimerStatus.paused));
   }
 
-  // 타이머 리셋
-  Future<void> reset() async {
+  // 타이머 리셋 (확인 다이얼로그 포함)
+  Future<void> resetWithConfirm(BuildContext context) async {
+    final currentState = state.value!;
+
+    // finished 상태일 때는 바로 리셋
+    if (currentState.status.isFinished) {
+      await _reset();
+      return;
+    }
+
+    // finished가 아닐 때는 확인 후 리셋
+    final confirmed = await TimerResetConfirmDialog.show(context: context);
+    if (confirmed == true) {
+      await _reset();
+    }
+  }
+
+  // 기존 reset 메서드는 내부 구현용으로 private으로 변경
+  Future<void> _reset() async {
     _timer?.cancel();
     final currentState = state.value!;
     state = AsyncData(
@@ -214,6 +234,20 @@ class TimerState extends AsyncNotifier<TimerStateModel> {
   void setAutoPlay(bool autoPlay) {
     this.autoPlay = autoPlay;
     state = AsyncData(state.value!.copyWith(autoPlay: autoPlay));
+  }
+
+  // 타이머 스킵 (확인 다이얼로그 포함)
+  Future<void> skipWithConfirm(BuildContext context) async {
+    final currentState = state.value!;
+
+    // finished 상태일 때는 스킵 불가
+    if (currentState.status.isFinished) return;
+
+    // 확인 후 스킵
+    final confirmed = await TimerSkipConfirmDialog.show(context: context);
+    if (confirmed == true) {
+      await skipToNextSet();
+    }
   }
 }
 
