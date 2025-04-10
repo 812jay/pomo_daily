@@ -13,5 +13,22 @@
   "breakTime": "Break Time",
   "sets": "Sets",
   "save": "Save",
-  "darkMode": "Dark Mode"
+  "darkMode": "Dark Mode",
+  "autoPlay": "Auto Play",
+  "completionTitle": "Congratulations! 🎉",
+  "completionSubtitle": "You've completed today's routine!",
+  "totalFocusTime": "Total Focus Time",
+  "totalBreakTime": "Total Break Time",
+  "totalSets": "Total Sets",
+  "minuteUnit": "min",
+  "setUnit": "sets",
+  "timerSettingSaveTitle": "Save Timer Settings",
+  "timerSettingSaveContent": "Changing timer settings will reset the running timer. Do you want to save?",
+  "cancel": "Cancel",
+  "saveConfirm": "Save",
+  "timerResetTitle": "Reset Timer",
+  "timerResetContent": "The current timer progress will be reset.\nDo you want to start over from the beginning?",
+  "confirm": "Confirm",
+  "timerSkipTitle": "Skip Timer",
+  "timerSkipContent": "Do you want to skip the current session\nand move to the next phase?"
 } 

@@ -46,4 +46,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get darkMode => 'Dark Mode';
+
+  @override
+  String get autoPlay => 'Auto Play';
+
+  @override
+  String get completionTitle => 'Congratulations! 🎉';
+
+  @override
+  String get completionSubtitle => 'You\'ve completed today\'s routine!';
+
+  @override
+  String get totalFocusTime => 'Total Focus Time';
+
+  @override
+  String get totalBreakTime => 'Total Break Time';
+
+  @override
+  String get totalSets => 'Total Sets';
+
+  @override
+  String get minuteUnit => 'min';
+
+  @override
+  String get setUnit => 'sets';
+
+  @override
+  String get timerSettingSaveTitle => 'Save Timer Settings';
+
+  @override
+  String get timerSettingSaveContent => 'Changing timer settings will reset the running timer. Do you want to save?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get saveConfirm => 'Save';
+
+  @override
+  String get timerResetTitle => 'Reset Timer';
+
+  @override
+  String get timerResetContent => 'The current timer progress will be reset.\nDo you want to start over from the beginning?';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get timerSkipTitle => 'Skip Timer';
+
+  @override
+  String get timerSkipContent => 'Do you want to skip the current session\nand move to the next phase?';
 }

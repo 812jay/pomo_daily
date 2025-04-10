@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/config/theme/custom_colors.dart';
-import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
+import 'package:pomo_daily/data/models/timer/res/timer_state_model.dart';
 import 'package:pomo_daily/providers/timer_provider.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
 import 'package:pomo_daily/ui/widgets/common/circle_button.dart';
 import 'package:pomo_daily/ui/widgets/common/lottie_icon.dart';
 import 'package:pomo_daily/ui/widgets/common/svg_icon.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_completion_dialog.dart';
 
 class TimerView extends ConsumerWidget {
   const TimerView({super.key});
@@ -15,6 +16,17 @@ class TimerView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final timerState = ref.watch(timerProvider);
     final timerController = ref.read(timerProvider.notifier);
+
+    ref.listen<AsyncValue<TimerStateModel>>(timerProvider, (previous, next) {
+      if (next.value?.status == TimerStatus.finished) {
+        TimerCompletionDialog.show(
+          context: context,
+          workDuration: timerController.workDuration,
+          breakDuration: timerController.breakDuration,
+          totalSets: timerController.totalSets,
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: context.colors.background,
@@ -41,7 +53,7 @@ class _LoadingView extends StatelessWidget {
 class _TimerContent extends StatelessWidget {
   const _TimerContent({required this.timer, required this.timerController});
 
-  final TimerLocal timer;
+  final TimerStateModel timer;
   final TimerState timerController;
 
   @override
@@ -110,13 +122,15 @@ class _SetIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 20,
-      child: ListView.separated(
-        shrinkWrap: true,
-        itemCount: totalSets,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
-        itemBuilder: (_, index) => _SetDot(isCompleted: completedSets > index),
+      width: MediaQuery.of(context).size.width * 0.5,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 10,
+        runSpacing: 10,
+        children: List.generate(
+          totalSets,
+          (index) => _SetDot(isCompleted: completedSets > index),
+        ),
       ),
     );
   }
@@ -146,7 +160,7 @@ class _SetDot extends StatelessWidget {
 class _ControlButtons extends StatelessWidget {
   const _ControlButtons({required this.timer, required this.timerController});
 
-  final TimerLocal timer;
+  final TimerStateModel timer;
   final TimerState timerController;
 
   @override
@@ -166,10 +180,14 @@ class _ControlButtons extends StatelessWidget {
               }
             },
           ),
-        if (timer.status.isFinished)
-          _ResetButton(onPressed: timerController.reset),
+        if (timer.status.isFinished || timer.status.isPaused)
+          _ResetButton(
+            onPressed: () => timerController.resetWithConfirm(context),
+          ),
         if (timer.status.isPaused)
-          _SkipButton(onPressed: timerController.skipToNextSet),
+          _SkipButton(
+            onPressed: () => timerController.skipWithConfirm(context),
+          ),
       ],
     );
   }

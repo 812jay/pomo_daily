@@ -13,5 +13,22 @@
   "breakTime": "휴식 시간",
   "sets": "세트 수",
   "save": "저장",
-  "darkMode": "다크모드"
+  "darkMode": "다크모드",
+  "autoPlay": "자동 재생",
+  "completionTitle": "축하합니다! 🎉",
+  "completionSubtitle": "오늘의 루틴을 완료했습니다!",
+  "totalFocusTime": "총 집중 시간",
+  "totalBreakTime": "총 휴식 시간",
+  "totalSets": "총 세트 수",
+  "minuteUnit": "분",
+  "setUnit": "세트",
+  "timerSettingSaveTitle": "타이머 설정 저장",
+  "timerSettingSaveContent": "타이머 설정을 변경하면 실행 중인 타이머가 초기화됩니다. 저장 하시겠어요?",
+  "cancel": "취소",
+  "saveConfirm": "저장",
+  "timerResetTitle": "타이머 초기화",
+  "timerResetContent": "현재 진행 중인 타이머가 초기화됩니다.\n처음부터 다시 시작하시겠어요?",
+  "confirm": "확인",
+  "timerSkipTitle": "타이머 건너뛰기",
+  "timerSkipContent": "현재 진행 중인 세션을 건너뛰고\n다음 단계로 이동하시겠어요?"
 } 

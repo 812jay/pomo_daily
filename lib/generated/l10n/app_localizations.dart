@@ -172,6 +172,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Mode'**
   String get darkMode;
+
+  /// No description provided for @autoPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Play'**
+  String get autoPlay;
+
+  /// No description provided for @completionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! 🎉'**
+  String get completionTitle;
+
+  /// No description provided for @completionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve completed today\'s routine!'**
+  String get completionSubtitle;
+
+  /// No description provided for @totalFocusTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Focus Time'**
+  String get totalFocusTime;
+
+  /// No description provided for @totalBreakTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Break Time'**
+  String get totalBreakTime;
+
+  /// No description provided for @totalSets.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Sets'**
+  String get totalSets;
+
+  /// No description provided for @minuteUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get minuteUnit;
+
+  /// No description provided for @setUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'sets'**
+  String get setUnit;
+
+  /// No description provided for @timerSettingSaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Timer Settings'**
+  String get timerSettingSaveTitle;
+
+  /// No description provided for @timerSettingSaveContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing timer settings will reset the running timer. Do you want to save?'**
+  String get timerSettingSaveContent;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @saveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveConfirm;
+
+  /// No description provided for @timerResetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Timer'**
+  String get timerResetTitle;
+
+  /// No description provided for @timerResetContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The current timer progress will be reset.\nDo you want to start over from the beginning?'**
+  String get timerResetContent;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @timerSkipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip Timer'**
+  String get timerSkipTitle;
+
+  /// No description provided for @timerSkipContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to skip the current session\nand move to the next phase?'**
+  String get timerSkipContent;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,19 +1,21 @@
-class TimerResponse {
-  final int workDuration;
-  final int breakDuration;
-  final int setCount;
-
-  TimerResponse({
+class TimerRequestModel {
+  TimerRequestModel({
     required this.workDuration,
     required this.breakDuration,
     required this.setCount,
+    required this.autoPlay,
   });
+  final int workDuration;
+  final int breakDuration;
+  final int setCount;
+  final bool autoPlay;
 
-  factory TimerResponse.fromJson(Map<String, dynamic> json) {
-    return TimerResponse(
+  factory TimerRequestModel.fromJson(Map<String, dynamic> json) {
+    return TimerRequestModel(
       workDuration: json['workDuration'],
       breakDuration: json['breakDuration'],
       setCount: json['setCount'],
+      autoPlay: json['autoPlay'],
     );
   }
 
@@ -22,6 +24,7 @@ class TimerResponse {
       'workDuration': workDuration,
       'breakDuration': breakDuration,
       'setCount': setCount,
+      'autoPlay': autoPlay,
     };
   }
 }

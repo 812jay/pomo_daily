@@ -2,65 +2,81 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pomo_daily/data/enums/timer/timer_type.dart';
-import 'package:pomo_daily/data/models/timer/req/timer_request.dart';
-import 'package:pomo_daily/data/models/timer/res/local/timer_local.dart';
+import 'package:pomo_daily/data/models/timer/req/timer_request_model.dart';
+import 'package:pomo_daily/data/models/timer/res/timer_state_model.dart';
 import 'package:pomo_daily/services/timer_service.dart';
 import 'package:pomo_daily/services/vibration_service.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_reset_confirm_dialog.dart';
+import 'package:pomo_daily/ui/widgets/timer/timer_skip_confirm_dialog.dart';
 
 import 'package:vibration/vibration.dart';
+import 'package:flutter/material.dart';
 
-final vibrationServiceProvider = Provider((ref) => VibrationService());
 final timerServiceProvider = Provider((ref) => TimerService());
+final vibrationServiceProvider = Provider((ref) => VibrationService());
 
 // 타이머 뷰모델
-class TimerState extends AsyncNotifier<TimerLocal> {
+class TimerState extends AsyncNotifier<TimerStateModel> {
+  static bool _isInitialized = false;
   Timer? _timer;
   late int workDuration;
   late int breakDuration;
   late int totalSets;
+  late bool autoPlay;
   late VibrationService _vibrationService;
   late TimerService _timerService;
 
   @override
-  Future<TimerLocal> build() async {
+  Future<TimerStateModel> build() async {
     _vibrationService = ref.read(vibrationServiceProvider);
     _timerService = ref.read(timerServiceProvider);
-    final TimerLocal timerSetting = await setTimerSetting();
 
-    return timerSetting;
+    if (!_isInitialized) {
+      await _timerService.initializeTimerSetting();
+      _isInitialized = true;
+    }
+
+    final TimerStateModel timerState = await getTimerSetting();
+    return timerState;
   }
 
-  Future<TimerLocal> setTimerSetting() async {
-    final timerSetting = await _timerService.getTimerSettings();
-    workDuration = timerSetting['workDuration'] as int;
-    breakDuration = timerSetting['breakDuration'] as int;
-    totalSets = timerSetting['setCount'] as int;
+  Future<TimerStateModel> getTimerSetting() async {
+    final timerConfig = await _timerService.getTimerSettings();
 
-    return _timerService.createInitialState(timerSetting);
+    // 클래스 변수들 초기화 추가
+    workDuration = timerConfig.workDuration.toInt();
+    breakDuration = timerConfig.breakDuration.toInt();
+    totalSets = timerConfig.setCount.toInt();
+    autoPlay = timerConfig.autoPlay;
+
+    return _timerService.getInitialState(timerConfig);
   }
 
   // 설정 저장 메서드
   Future<void> saveSettings() async {
-    final payload = TimerRequest(
+    _timer?.cancel();
+    final request = TimerRequestModel(
       workDuration: workDuration,
       breakDuration: breakDuration,
       setCount: totalSets,
+      autoPlay: autoPlay,
     );
 
     // 설정 저장
-    await _timerService.setTimer(payload);
+    await _timerService.setTimer(request);
 
     // 현재 상태 리셋
     final currentState = state.value;
     if (currentState != null) {
       state = AsyncData(
-        TimerLocal(
-          duration: workDuration, // 새로 설정된 workDuration 사용
+        TimerStateModel(
+          duration: workDuration,
           status: TimerStatus.initial,
-          mode: TimerMode.work, // 작업 모드로 초기화
-          currentSet: 1, // 첫 번째 세트로 초기화
-          totalSets: totalSets, // 새로 설정된 totalSets 사용
-          completedSets: 0, // 완료된 세트 초기화
+          mode: TimerMode.work,
+          currentSet: 1,
+          totalSets: totalSets,
+          completedSets: 0,
+          autoPlay: currentState.autoPlay,
         ),
       );
     }
@@ -83,41 +99,38 @@ class TimerState extends AsyncNotifier<TimerLocal> {
     state = AsyncData(currentState.copyWith(status: TimerStatus.paused));
   }
 
-  // 타이머 리셋
-  Future<void> reset() async {
+  // 타이머 리셋 (확인 다이얼로그 포함)
+  Future<void> resetWithConfirm(BuildContext context) async {
+    final currentState = state.value!;
+
+    // finished 상태일 때는 바로 리셋
+    if (currentState.status.isFinished) {
+      await _reset();
+      return;
+    }
+
+    // finished가 아닐 때는 확인 후 리셋
+    final confirmed = await TimerResetConfirmDialog.show(context: context);
+    if (confirmed == true) {
+      await _reset();
+    }
+  }
+
+  // 기존 reset 메서드는 내부 구현용으로 private으로 변경
+  Future<void> _reset() async {
     _timer?.cancel();
     final currentState = state.value!;
     state = AsyncData(
-      TimerLocal(
+      TimerStateModel(
         duration: workDuration,
         status: TimerStatus.initial,
         mode: TimerMode.work,
         currentSet: 1,
         totalSets: currentState.totalSets,
         completedSets: 0,
+        autoPlay: currentState.autoPlay,
       ),
     );
-  }
-
-  // 모드 전환
-  Future<void> toggleMode() async {
-    _timer?.cancel();
-    final currentState = state.value!;
-    state = AsyncData(
-      TimerLocal(
-        duration:
-            currentState.mode == TimerMode.work ? breakDuration : workDuration,
-        status: TimerStatus.initial,
-        mode:
-            currentState.mode == TimerMode.work
-                ? TimerMode.shortBreak
-                : TimerMode.work,
-        currentSet: currentState.currentSet,
-        totalSets: currentState.totalSets,
-        completedSets: currentState.completedSets,
-      ),
-    );
-    await vibrate();
   }
 
   // 시간 포맷 함수
@@ -157,11 +170,9 @@ class TimerState extends AsyncNotifier<TimerLocal> {
   Future<void> _handleSetCompletion() async {
     final currentState = state.value!;
     if (currentState.mode == TimerMode.work) {
-      // 작업 시간이 끝났을 때
       final newCompletedSets = currentState.completedSets + 1;
 
       if (newCompletedSets >= currentState.totalSets) {
-        // 모든 세트가 완료됨
         state = AsyncData(
           currentState.copyWith(
             status: TimerStatus.finished,
@@ -173,65 +184,44 @@ class TimerState extends AsyncNotifier<TimerLocal> {
         state = AsyncData(
           currentState.copyWith(
             duration: breakDuration,
-            status: TimerStatus.initial,
+            status: autoPlay ? TimerStatus.running : TimerStatus.paused,
             mode: TimerMode.shortBreak,
             completedSets: newCompletedSets,
           ),
         );
+        // autoPlay가 true일 때만 타이머 시작
+        if (autoPlay) {
+          _timer = Timer.periodic(
+            const Duration(seconds: 1),
+            (_) => _countdown(),
+          );
+        }
       }
     } else {
-      // 휴식 시간이 끝났을 때
+      // 작업 시간으로 전환
       state = AsyncData(
         currentState.copyWith(
           duration: workDuration,
-          status: TimerStatus.initial,
+          status: autoPlay ? TimerStatus.running : TimerStatus.paused,
           mode: TimerMode.work,
           currentSet: currentState.currentSet + 1,
         ),
       );
+      // autoPlay가 true일 때만 타이머 시작
+      if (autoPlay) {
+        _timer = Timer.periodic(
+          const Duration(seconds: 1),
+          (_) => _countdown(),
+        );
+      }
     }
+    await vibrate();
   }
 
   // 다음 세트로 건너뛰기
   Future<void> skipToNextSet() async {
     _timer?.cancel(); // 현재 타이머를 중지합니다.
-    final currentState = state.value!;
-
-    if (currentState.mode == TimerMode.work) {
-      // 현재 모드가 work일 때만 completedSets 증가
-      final newCompletedSets = currentState.completedSets + 1;
-
-      if (newCompletedSets >= currentState.totalSets) {
-        // 모든 세트가 완료된 경우
-        state = AsyncData(
-          currentState.copyWith(
-            status: TimerStatus.finished,
-            completedSets: newCompletedSets,
-          ),
-        );
-      } else {
-        // 다음 세트로 전환
-        state = AsyncData(
-          currentState.copyWith(
-            duration: breakDuration, // 다음 세트는 휴식 시간으로 설정
-            status: TimerStatus.initial,
-            mode: TimerMode.shortBreak,
-            completedSets: newCompletedSets, // completedSets 증가
-          ),
-        );
-      }
-    } else {
-      // 현재 모드가 break일 때는 completedSets 증가하지 않음
-      state = AsyncData(
-        currentState.copyWith(
-          duration: workDuration, // 다음 세트는 작업 시간으로 설정
-          status: TimerStatus.initial,
-          mode: TimerMode.work,
-          currentSet: currentState.currentSet + 1, // 현재 세트 수 증가
-        ),
-      );
-    }
-    await vibrate();
+    _handleSetCompletion();
   }
 
   Future<void> vibrate() async {
@@ -240,9 +230,28 @@ class TimerState extends AsyncNotifier<TimerLocal> {
       await Vibration.vibrate(duration: 700);
     }
   }
+
+  void setAutoPlay(bool autoPlay) {
+    this.autoPlay = autoPlay;
+    state = AsyncData(state.value!.copyWith(autoPlay: autoPlay));
+  }
+
+  // 타이머 스킵 (확인 다이얼로그 포함)
+  Future<void> skipWithConfirm(BuildContext context) async {
+    final currentState = state.value!;
+
+    // finished 상태일 때는 스킵 불가
+    if (currentState.status.isFinished) return;
+
+    // 확인 후 스킵
+    final confirmed = await TimerSkipConfirmDialog.show(context: context);
+    if (confirmed == true) {
+      await skipToNextSet();
+    }
+  }
 }
 
 // Provider 정의
-final timerProvider = AsyncNotifierProvider<TimerState, TimerLocal>(
+final timerProvider = AsyncNotifierProvider<TimerState, TimerStateModel>(
   () => TimerState(),
 );
