@@ -36,6 +36,9 @@ target 'Runner' do
 
   flutter_root = File.expand_path('..', File.expand_path('..', __dir__))
 
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/AppDistribution'
 
   # Pods for Runner
 
