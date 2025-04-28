@@ -43,3 +43,29 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 인증서/프로비저닝
+*.p12
+*.cer
+*.mobileprovision
+ios/fastlane/certificates/
+ios/fastlane/profiles/
+
+# App Store Connect API 키
+AuthKey_*.p8
+ios/fastlane/AuthKey_*.p8
+
+# 환경변수 파일
+.env
+ios/fastlane/.env
+
+# Firebase
+ios/Runner/GoogleService-Info.plist
+
+# fastlane 임시/로그/빌드 산출물
+ios/fastlane/report.xml
+ios/fastlane/test_output/
+ios/fastlane/.env
+
+# 빌드 결과물
+ios/build/

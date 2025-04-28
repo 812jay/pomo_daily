@@ -16,10 +16,67 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Push a new release build to the App Store"
-  lane :release do
+
+  # --- Beta 배포 (Firebase App Distribution) ---
+  desc "Build and distribute a new beta build to Firebase App Distribution"
+  lane :beta do
+    # (선택사항) 인증서/프로파일 관리 (Match 사용 시)
+    match(type: "adhoc", readonly: false)
+
+    # 빌드 번호 자동 증가 (예: 1, 2, 3...)
     increment_build_number(xcodeproj: "Runner.xcodeproj")
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
-    upload_to_app_store
+
+    # 앱 빌드 (Ad Hoc 방식)
+    build_ios_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner", # Flutter 기본 스킴
+      export_method: "ad-hoc",
+      output_directory: "build", # 빌드 결과 저장 폴더
+      output_name: "pomo_daily_beta.ipa" # 생성될 IPA 파일 이름
+    )
+
+    # Firebase App Distribution으로 배포
+    firebase_app_distribution(
+      app: "1:1050199370989:ios:fb09614d0d8ea41aa630e4", # 여기에 Firebase 앱 ID 입력!
+      ipa_path: "build/pomo_daily_beta.ipa",
+      groups: "testers", # 배포할 테스터 그룹 (Firebase 콘솔에서 생성)
+      release_notes: "Latest beta build. Build: #{lane_context[SharedValues::BUILD_NUMBER]}", # 빌드 노트에 빌드 번호 포함
+      firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"] # CI 환경에서는 환경 변수 사용 권장
+    )
+    
+    puts "Successfully distributed beta build #{lane_context[SharedValues::BUILD_NUMBER]} to Firebase!"
   end
+
+  # --- 정식 배포 (App Store) ---
+  desc "Build and upload a new release build to App Store Connect"
+  lane :release do
+    # (선택사항) 인증서/프로파일 관리 (Match 사용 시)
+    match(type: "appstore", readonly: false)
+
+    # 빌드 번호 자동 증가
+    increment_build_number(xcodeproj: "Runner.xcodeproj")
+
+    # 앱 빌드 (App Store 방식)
+    build_ios_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "build",
+      output_name: "pomo_daily_release.ipa"
+    )
+
+    # App Store Connect에 업로드
+    upload_to_app_store(
+      ipa: "build/pomo_daily_release.ipa",
+      skip_screenshots: false, # 스크린샷은 App Store Connect에서 관리 시 true
+      skip_metadata: false,    # 메타데이터는 App Store Connect에서 관리 시 true
+      submission_information: { add_id_info_uses_idfa: false }, # IDFA 사용 여부
+      release_notes: File.read(".../metadata/ko/release_notes.txt")
+      # App Store Connect API 키 사용 시 추가 인증 필요 없음
+      # API 키 미사용 시 Apple ID/앱 특정 암호 필요
+    )
+
+    puts "Successfully uploaded release build #{lane_context[SharedValues::BUILD_NUMBER]} to App Store Connect!"
+  end
+
 end
